@@ -1,0 +1,472 @@
+:root {
+    --primary-green: #047857; /* Emerald 700 */
+    --dark-green: #064e3b;   /* Emerald 900 */
+    --gold: #f59e0b;         /* Amber 500 */
+    --light-gold: #fcd34d;   /* Amber 300 */
+    /* Tajwid Colors */
+    --tajwid-ghunnah: #FF5722; /* Red Orange */
+    --tajwid-qalqalah: #2196F3; /* Blue */
+    --tajwid-madd: #4CAF50; /* Green */
+    --tajwid-ikhfa: #9C27B0; /* Purple */
+    --tajwid-idgham: #FF9800; /* Orange */
+    --tajwid-iqlab: #00BCD4; /* Cyan */
+    --tajwid-hamzah: #F44336; /* Red */
+}
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--dark-green);
+}
+.font-amiri {
+    font-family: 'Amiri', serif;
+}
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+::-webkit-scrollbar-track {
+    background: #065f46;
+}
+::-webkit-scrollbar-thumb {
+    background: var(--gold);
+    border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--light-gold);
+}
+.nav-item.active {
+    background-color: var(--gold);
+    color: var(--dark-green);
+}
+/* Compass styling */
+.compass {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #fcd34d 0%, #f59e0b 100%);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    border: 5px solid var(--gold);
+}
+.compass-needle {
+    width: 0;
+    height: 0;
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-bottom: 90px solid var(--dark-green);
+    position: absolute;
+    top: 15px;
+    transform-origin: 50% 85px;
+    transition: transform 0.5s ease-out;
+}
+.compass-center {
+    width: 20px;
+    height: 20px;
+    background: var(--dark-green);
+    border-radius: 50%;
+    z-index: 10;
+}
+/* Map styling */
+#map {
+    height: 450px;
+    border-radius: 0.5rem;
+    z-index: 10; /* Ensure map is interactable */
+}
+/* Leaflet routing machine custom style */
+.leaflet-routing-container {
+    background-color: rgba(6, 78, 59, 0.8); /* bg-emerald-900 with opacity */
+    color: #d1d5db; /* text-gray-300 */
+    border-radius: 0.5rem;
+    backdrop-filter: blur(5px);
+}
+.leaflet-routing-alt, .leaflet-routing-alt h2 {
+    color: #fcd34d; /* text-amber-300 */
+}
+/* Ayat number styling */
+.ayah-number {
+    background-color: var(--gold);
+    color: var(--dark-green);
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    margin-right: 12px;
+    flex-shrink: 0;
+}
+/* Juz tabs styling */
+.juz-tab {
+    padding: 8px 16px;
+    border-radius: 8px;
+    background-color: rgba(16, 185, 129, 0.2);
+    color: #d1fae5;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+.juz-tab:hover {
+    background-color: rgba(16, 185, 129, 0.4);
+}
+.juz-tab.active {
+    background-color: var(--gold);
+    color: var(--dark-green);
+    font-weight: bold;
+}
+/* Asmaul Husna card styling */
+.asmaul-husna-card {
+    transition: all 0.3s ease;
+}
+.asmaul-husna-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+/* Audio player styling */
+.audio-player {
+    background-color: rgba(6, 78, 59, 0.7);
+    border-radius: 8px;
+    padding: 8px;
+    margin-top: 10px;
+}
+.play-button {
+    background-color: var(--gold);
+    color: var(--dark-green);
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.play-button:hover {
+    background-color: var(--light-gold);
+}
+.play-button:active {
+    transform: scale(0.95);
+}
+/* Error message styling */
+.error-message {
+    background-color: rgba(239, 68, 68, 0.2);
+    border-left: 4px solid #ef4444;
+    padding: 12px;
+    margin: 16px 0;
+    border-radius: 4px;
+}
+.retry-button {
+    background-color: var(--gold);
+    color: var(--dark-green);
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: all 0.2s;
+}
+.retry-button:hover {
+    background-color: var(--light-gold);
+}
+/* Tajwid styling */
+.tajwid-container {
+    margin: 10px 0;
+    padding: 15px;
+    background-color: rgba(6, 78, 59, 0.3);
+    border-radius: 8px;
+}
+.tajwid-toggle {
+    background-color: var(--gold);
+    color: var(--dark-green);
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-bottom: 10px;
+    transition: all 0.2s;
+    font-size: 14px;
+}
+.tajwid-toggle:hover {
+    background-color: var(--light-gold);
+}
+.tajwid-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+    font-size: 12px;
+}
+.tajwid-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.tajwid-legend-color {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+.tajwid-ghunnah { color: var(--tajwid-ghunnah); }
+.tajwid-qalqalah { color: var(--tajwid-qalqalah); }
+.tajwid-madd { color: var(--tajwid-madd); }
+.tajwid-ikhfa { color: var(--tajwid-ikhfa); }
+.tajwid-idgham { color: var(--tajwid-idgham); }
+.tajwid-iqlab { color: var(--tajwid-iqlab); }
+.tajwid-hamzah { color: var(--tajwid-hamzah); }
+/* Mosque list styling */
+.mosque-item {
+    background-color: rgba(16, 185, 129, 0.2);
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.mosque-item:hover {
+    background-color: rgba(16, 185, 129, 0.4);
+}
+.mosque-item.active {
+    background-color: rgba(245, 158, 11, 0.3);
+    border-left: 4px solid var(--gold);
+}
+.mosque-name {
+    font-weight: bold;
+    color: var(--gold);
+    margin-bottom: 4px;
+}
+.mosque-address {
+    font-size: 14px;
+    color: #d1fae5;
+    margin-bottom: 4px;
+}
+.mosque-distance {
+    font-size: 12px;
+    color: #a7f3d0;
+}
+.location-permission {
+    background-color: rgba(251, 191, 36, 0.2);
+    border-left: 4px solid #fbbf24;
+    padding: 12px;
+    margin: 16px 0;
+    border-radius: 4px;
+}
+.permission-button {
+    background-color: var(--gold);
+    color: var(--dark-green);
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: all 0.2s;
+}
+.permission-button:hover {
+    background-color: var(--light-gold);
+}
+/* Hijaiyah Canvas Styling */
+.hijaiyah-container {
+    background-color: #f0fdfa;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    margin: 0 auto;
+}
+.hijaiyah-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+.hijaiyah-title {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    color: #047857;
+    margin-bottom: 8px;
+}
+.hijaiyah-subtitle {
+    font-family: 'Poppins', sans-serif;
+    color: #6b7280;
+    font-size: 16px;
+}
+.hijaiyah-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    background-color: #ecfdf5;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #d1fae5;
+}
+.target-letter-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.target-label {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    color: #047857;
+    margin-bottom: 8px;
+    font-size: 16px;
+}
+.target-letter {
+    font-family: 'Amiri', serif;
+    font-size: 6rem;
+    font-weight: 700;
+    color: #007979;
+    text-shadow: 2px 2px #ccfbf1;
+    line-height: 1;
+}
+.control-buttons {
+    display: flex;
+    gap: 10px;
+}
+.hijaiyah-button {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    padding: 10px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+.hijaiyah-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+.next-button {
+    background-color: #4f46e5;
+    color: white;
+}
+.next-button:hover {
+    background-color: #4338ca;
+}
+.clear-button {
+    background-color: #ef4444;
+    color: white;
+}
+.clear-button:hover {
+    background-color: #dc2626;
+}
+.canvas-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+    background-color: white;
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06);
+}
+#drawingCanvas {
+    border: 2px solid #00a8a8;
+    border-radius: 8px;
+    cursor: crosshair;
+    touch-action: none;
+    max-width: 100%;
+    height: auto;
+}
+.feedback-container {
+    background-color: #ecfdf5;
+    border-left: 4px solid #10b981;
+    padding: 15px;
+    border-radius: 8px;
+}
+.feedback-title {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    color: #047857;
+    margin-bottom: 8px;
+    font-size: 18px;
+}
+.feedback-text {
+    font-family: 'Poppins', sans-serif;
+    color: #374151;
+    font-size: 16px;
+    line-height: 1.5;
+}
+.progress-container {
+    margin-top: 15px;
+    background-color: #e5e7eb;
+    border-radius: 9999px;
+    height: 8px;
+    overflow: hidden;
+}
+.progress-bar {
+    height: 100%;
+    background-color: #10b981;
+    transition: width 0.3s ease;
+}
+.score-display {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+    font-size: 14px;
+}
+.current-score {
+    font-weight: 600;
+    color: #047857;
+}
+.target-score {
+    color: #6b7280;
+}
+.hijaiyah-progress {
+    margin-top: 20px;
+    background-color: #ecfdf5;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #d1fae5;
+}
+.progress-title {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    color: #047857;
+    margin-bottom: 10px;
+    font-size: 16px;
+}
+.letters-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+    gap: 8px;
+}
+.letter-item {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    font-family: 'Amiri', serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: #047857;
+    background-color: white;
+    border: 1px solid #d1fae5;
+    transition: all 0.2s;
+}
+.letter-item.completed {
+    background-color: #10b981;
+    color: white;
+    border-color: #10b981;
+}
+.letter-item.current {
+    background-color: #f59e0b;
+    color: white;
+    border-color: #f59e0b;
+    transform: scale(1.1);
+}
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .hijaiyah-controls {
+        flex-direction: column;
+        gap: 15px;
+    }
+    .control-buttons {
+        width: 100%;
+        justify-content: center;
+    }
+    .target-letter {
+        font-size: 4rem;
+    }
+}

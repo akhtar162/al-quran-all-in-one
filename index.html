@@ -83,6 +83,7 @@
 <button class="nav-item p-2 rounded-lg bg-emerald-700 hover:bg-amber-500 hover:text-emerald-900 transition-all duration-300" data-target="bookmark">Bookmark</button>
 <button class="nav-item p-2 rounded-lg bg-emerald-700 hover:bg-amber-500 hover:text-emerald-900 transition-all duration-300" data-target="hijriah">Kalender Hijriah</button>
 </nav>
+<a href="https://chatalquran9245432.lovable.app" target="_blank" rel="noopener noreferrer" class="block w-full text-center p-3 mb-6 rounded-lg bg-amber-600 text-white font-bold hover:bg-amber-500 transition-all duration-300">💬 Community Chat</a>
 <!-- Content Sections -->
 <main>
 <!-- Al-Quran Section -->
@@ -365,7 +366,7 @@
 <!-- Kalender Hijriah Section -->
 <section class="content-section hidden" id="hijriah-section">
     <h2 class="text-2xl font-bold text-amber-400 mb-4 text-center">Kalender Hijriah & Masehi</h2>
-    <div class="bg-emerald-800 p-4 rounded-lg">
+    <div class="bg-emerald-800 p-4 rounded-lg max-w-3xl mx-auto">
         <div class="flex justify-between items-center mb-4">
             <button id="prev-month-btn" class="px-4 py-2 bg-emerald-700 rounded-lg hover:bg-amber-500 transition-colors">&lt; Sebelumnya</button>
             <h3 id="hijri-month-year" class="text-xl font-bold text-amber-300 text-center"></h3>
@@ -374,25 +375,10 @@
         <div id="hijri-calendar-grid" class="grid grid-cols-7 gap-1 text-center">
             <!-- Calendar will be populated here -->
         </div>
-        <p class="text-xs text-center text-gray-400 mt-4">Data kalender disediakan oleh Aladhan API. Mungkin terdapat sedikit perbedaan dengan penentuan tanggal lokal.</p>
+        <p class="text-xs text-center text-gray-400 mt-4">Data kalender disediakan oleh MyQuran API. Mungkin terdapat sedikit perbedaan dengan penentuan tanggal global.</p>
     </div>
 </section>
 </main>
-</div>
-<!-- Global Murottal Player -->
-<div id="global-player" class="fixed bottom-0 left-0 right-0 bg-emerald-900 border-t-2 border-amber-500 p-3 transform translate-y-full transition-transform duration-300 ease-in-out z-30">
-    <div class="container mx-auto flex items-center justify-between gap-4">
-        <div class="text-sm overflow-hidden whitespace-nowrap">
-            <p id="player-surah-info" class="font-bold text-amber-300 truncate">Memuat...</p>
-            <p id="player-status" class="text-gray-400">Berhenti</p>
-        </div>
-        <div class="flex items-center gap-3 flex-shrink-0">
-            <button id="player-prev-btn" class="text-xl hover:text-amber-400 transition-colors">⏮️</button>
-            <button id="player-play-pause-btn" class="text-3xl hover:text-amber-400 transition-colors">▶️</button>
-            <button id="player-next-btn" class="text-xl hover:text-amber-400 transition-colors">⏭️</button>
-            <button id="player-stop-btn" class="text-red-500 hover:text-red-400 transition-colors font-bold text-2xl leading-none">⏹</button>
-        </div>
-    </div>
 </div>
 <!-- Modal for Tafsir -->
 <div class="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-40 hidden p-4" id="tafsir-modal">
@@ -439,20 +425,8 @@
         const DB_VERSION = 1;
 
         // Murottal player variables
-        // --- Global Murottal Player Variables ---
-        const globalPlayer = document.getElementById('global-player');
-        const playerInfo = document.getElementById('player-surah-info');
-        const playerStatus = document.getElementById('player-status');
-        const playerPlayPauseBtn = document.getElementById('player-play-pause-btn');
-        const playerStopBtn = document.getElementById('player-stop-btn');
-        const playerNextBtn = document.getElementById('player-next-btn');
-        const playerPrevBtn = document.getElementById('player-prev-btn');
         let currentAudio = null;
         let currentPlayingAyahElement = null;
-        let currentPlaylist = [];
-        let currentTrackIndex = -1;
-
-
 
         const showLoading = () => loadingSpinner.classList.remove('hidden');
         const hideLoading = () => loadingSpinner.classList.add('hidden');
@@ -858,7 +832,6 @@
             document.querySelectorAll('.play-button').forEach(btn => {
                 btn.addEventListener('click', () => {
                     playAudio(btn.dataset.surah, btn.dataset.ayah, btn.dataset.totalAyah);
-                    startPlaybackFrom(btn.dataset.surah, btn.dataset.ayah);
                 });
             });
 
@@ -938,57 +911,11 @@
 
         function playAudio(surahNumber, ayahNumber, totalAyahs) {
             stopAudio(); // Stop any currently playing audio
-        // --- Global Murottal Player Logic ---
-        function startPlaybackFrom(surahNumber, startAyahNumber) {
-            const surahData = allQuranData.find(s => (s.number || s.nomor) == surahNumber);
-            if (!surahData) return;
 
-            const totalAyahs = surahData.numberOfAyahs || surahData.jumlah_ayat;
-            currentPlaylist = [];
-            for (let i = 1; i <= totalAyahs; i++) {
-                currentPlaylist.push({
-                    surahNumber: surahNumber,
-                    ayahNumber: i,
-                    surahName: surahData.englishName || surahData.nama_latin
-                });
-            }
-
-            currentTrackIndex = startAyahNumber - 1;
-            playCurrentTrack();
-            globalPlayer.classList.remove('hidden');
-            setTimeout(() => globalPlayer.classList.remove('translate-y-full'), 10); // Animate in
-        }
-
-        function playCurrentTrack() {
-            if (currentTrackIndex < 0 || currentTrackIndex >= currentPlaylist.length) {
-                stopAudio();
-                return;
-            }
-
-            const track = currentPlaylist[currentTrackIndex];
-            const { surahNumber, ayahNumber, surahName } = track;
-
-            // Stop previous audio if any
-            if (currentAudio) {
-                currentAudio.pause();
-            }
-
-            // Highlight new verse
-            if (currentPlayingAyahElement) {
-                currentPlayingAyahElement.classList.remove('bg-emerald-700', 'rounded-lg');
-            }
             const ayahId = `ayah-${surahNumber}-${ayahNumber}`;
             currentPlayingAyahElement = document.getElementById(ayahId);
-            if (currentPlayingAyahElement) {
-                currentPlayingAyahElement.classList.add('bg-emerald-700', 'rounded-lg');
-                currentPlayingAyahElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }
 
             if (!currentPlayingAyahElement) return;
-            // Update global player UI
-            playerInfo.textContent = `QS. ${surahName} [${surahNumber}:${ayahNumber}]`;
-            playerStatus.textContent = 'Memutar...';
-            playerPlayPauseBtn.textContent = '⏸️';
 
             // Highlight the current verse
             currentPlayingAyahElement.classList.add('bg-emerald-700', 'rounded-lg');
@@ -999,14 +926,12 @@
             if (stopButton) stopButton.classList.remove('hidden');
 
             const audioUrl = `https://cdn.islamic.network/quran/audio/128/ar.alafasy/${surahNumber * 1000 + parseInt(ayahNumber)}.mp3`;
-            const audioUrl = `https://cdn.islamic.network/quran/audio/128/ar.alafasy/${parseInt(surahNumber) * 1000 + parseInt(ayahNumber)}.mp3`;
             currentAudio = new Audio(audioUrl);
 
             currentAudio.play().catch(error => {
                 console.error('Error playing audio:', error);
                 alert('Gagal memutar audio. Silakan coba lagi.');
                 stopAudio(); // Clean up on error
-                playerStatus.textContent = 'Gagal memutar';
             });
 
             // Event listener for when the audio ends
@@ -1014,46 +939,10 @@
                 const nextAyahNumber = parseInt(ayahNumber) + 1;
                 if (nextAyahNumber <= totalAyahs) {
                     playAudio(surahNumber, nextAyahNumber, totalAyahs);
-                playNext();
-            };
-
-            currentAudio.onpause = () => {
-                playerStatus.textContent = 'Dijeda';
-                playerPlayPauseBtn.textContent = '▶️';
-            };
-
-            currentAudio.onplay = () => {
-                playerStatus.textContent = 'Memutar...';
-                playerPlayPauseBtn.textContent = '⏸️';
-            };
-        }
-
-        function playNext() {
-            if (currentTrackIndex < currentPlaylist.length - 1) {
-                currentTrackIndex++;
-                playCurrentTrack();
-            } else {
-                stopAudio(); // End of playlist
-            }
-        }
-
-        function playPrev() {
-            if (currentTrackIndex > 0) {
-                currentTrackIndex--;
-                playCurrentTrack();
-            }
-        }
-
-        function togglePlayPause() {
-            if (currentAudio) {
-                if (currentAudio.paused) {
-                    currentAudio.play();
                 } else {
                     stopAudio(); // End of surah
-                    currentAudio.pause();
                 }
             };
-            }
         }
 
         function stopAudio() {
@@ -1063,22 +952,7 @@
             }
             document.querySelectorAll('.ayah-container').forEach(el => el.classList.remove('bg-emerald-700', 'rounded-lg'));
             document.querySelectorAll('.stop-button').forEach(btn => btn.classList.add('hidden'));
-            if (currentPlayingAyahElement) {
-                currentPlayingAyahElement.classList.remove('bg-emerald-700', 'rounded-lg');
-                currentPlayingAyahElement = null;
-            }
-            currentPlaylist = [];
-            currentTrackIndex = -1;
-            globalPlayer.classList.add('translate-y-full');
-            setTimeout(() => globalPlayer.classList.add('hidden'), 300);
         }
-
-        playerPlayPauseBtn.addEventListener('click', togglePlayPause);
-        playerStopBtn.addEventListener('click', stopAudio);
-        playerNextBtn.addEventListener('click', playNext);
-        playerPrevBtn.addEventListener('click', playPrev);
-
-
         backToSurahListBtn.addEventListener('click', () => {
             surahListView.classList.remove('hidden');
             surahDetailView.classList.add('hidden');
@@ -1171,6 +1045,12 @@
             fetchSholatSchedule(city);
         });
 
+        sholatCity.addEventListener('keyup', (event) => {
+            if (event.key === 'Enter') {
+                searchSholatBtn.click();
+            }
+        });
+
         async function fetchSholatSchedule(city) {
             showLoading();
             sholatResult.innerHTML = '<p class="text-center text-gray-400">Memuat jadwal sholat...</p>';
@@ -1178,6 +1058,7 @@
             try {
                 const today = new Date();
                 const year = today.getFullYear();
+                searchSholatBtn.disabled = true; // Disable button during fetch
                 const month = today.getMonth() + 1;
                 
                 // 1. Find city ID from API
@@ -1202,8 +1083,14 @@
                     throw new Error('Data jadwal sholat tidak valid.');
                 }
 
+                // Helper function to format date to YYYY-MM-DD in local timezone
+                const toLocalISOString = (date) => {
+                    const offset = date.getTimezoneOffset();
+                    const adjustedDate = new Date(date.getTime() - (offset * 60 * 1000));
+                    return adjustedDate.toISOString().split('T')[0];
+                }
                 // Find today's schedule
-                const todaySchedule = data.data.jadwal.find(j => j.tanggal === today.toISOString().split('T')[0]);
+                const todaySchedule = data.data.jadwal.find(j => j.tanggal === toLocalISOString(today));
                 
                 if (todaySchedule) {
                     renderSholatSchedule(todaySchedule, cityName);
@@ -1215,6 +1102,7 @@
                 sholatResult.innerHTML = `<p class="text-red-400">Gagal memuat jadwal sholat: ${error.message}</p>`;
             } finally {
                 hideLoading();
+                searchSholatBtn.disabled = false; // Re-enable button
             }
         }
 
@@ -2288,6 +2176,9 @@
 
         async function renderHijriCalendar(year, month) {
             showLoading();
+            prevMonthBtn.disabled = true;
+            nextMonthBtn.disabled = true;
+
             hijriCalendarGrid.innerHTML = ''; // Clear previous calendar
 
             // Add day headers
@@ -2297,43 +2188,43 @@
             });
 
             try {
-                const response = await fetch(`https://api.aladhan.com/v1/calendar/${year}/${month}`);
+                // Menggunakan API dari myquran.com yang lebih stabil untuk wilayah Indonesia
+                // API ini tidak memerlukan ID kota, langsung memberikan kalender berdasarkan bulan dan tahun
+                const response = await fetch(`https://api.myquran.com/v1/kalender/hijriah/${year}/${month}`);
                 if (!response.ok) throw new Error('Gagal memuat data kalender.');
                 const data = await response.json();
 
-                if (data.code === 200 && data.data.length > 0) {
-                    // Pemetaan dari nama hari Inggris (dari API) ke singkatan Indonesia
-                    const dayMap = {
-                        "Sunday": "Min", "Monday": "Sen", "Tuesday": "Sel", 
-                        "Wednesday": "Rab", "Thursday": "Kam", "Friday": "Jum", 
-                        "Saturday": "Sab"
-                    };
-
-                    const firstDayOfMonth = data.data[0].date.gregorian.weekday.en;
-                    const firstDayIndonesian = dayMap[firstDayOfMonth];
-                    const firstDayIndex = days.indexOf(firstDayIndonesian);
-
+                if (data.status && data.data && data.data.length > 0) {
+                    const firstDayOfMonth = new Date(year, month - 1, 1).getDay();
+                    const firstDayIndex = (firstDayOfMonth === 0) ? 6 : firstDayOfMonth -1; // Sesuaikan: Minggu=6, Senin=0
+                    
                     // Set calendar title
-                    const sampleDate = data.data[15]; // Use a mid-month date to be safe
-                    hijriMonthYearEl.textContent = `${sampleDate.date.hijri.month.en} ${sampleDate.date.hijri.year} H / ${sampleDate.date.gregorian.month.en} ${sampleDate.date.gregorian.year} M`;
+                    const sampleDate = data.data[15] || data.data[0]; // Gunakan tanggal tengah bulan
+                    const hijriMonthName = sampleDate.bulan_hijriah;
+                    const hijriYear = sampleDate.tahun_hijriah;
+                    const gregorianMonthName = new Date(year, month - 1).toLocaleString('id-ID', { month: 'long' });
+                    hijriMonthYearEl.textContent = `${hijriMonthName} ${hijriYear} H / ${gregorianMonthName} ${year} M`;
 
                     // Add empty cells for days before the 1st of the month
                     for (let i = 0; i < firstDayIndex; i++) {
                         hijriCalendarGrid.innerHTML += '<div></div>';
                     }
-
+                    
                     // Populate calendar with dates
                     data.data.forEach(dayData => {
                         const dayCell = document.createElement('div');
-                        const gregorianDate = dayData.date.gregorian.day;
-                        const hijriDate = dayData.date.hijri.day;
-                        const isToday = new Date().toDateString() === new Date(dayData.date.gregorian.date).toDateString();
+                        const gregorianDate = dayData.tanggal_masehi;
+                        const hijriDate = dayData.tanggal_hijriah;
+                        
+                        const today = new Date();
+                        const isToday = today.getFullYear() === year && today.getMonth() + 1 === month && today.getDate() === parseInt(gregorianDate);
 
                         dayCell.className = `p-2 border border-emerald-700 rounded-md ${isToday ? 'bg-amber-500 text-emerald-900 font-bold' : 'bg-emerald-900'}`;
                         dayCell.innerHTML = `
                             <div class="text-lg">${gregorianDate}</div>
                             <div class="text-xs text-gray-400 ${isToday ? 'text-emerald-800' : ''}">${hijriDate}</div>
                         `;
+                        
                         hijriCalendarGrid.appendChild(dayCell);
                     });
                 } else {
@@ -2344,6 +2235,8 @@
                 hijriCalendarGrid.innerHTML = `<p class="col-span-7 text-red-400">Error: ${error.message}</p>`;
             } finally {
                 hideLoading();
+                prevMonthBtn.disabled = false;
+                nextMonthBtn.disabled = false;
             }
         }
 
@@ -2357,22 +2250,10 @@
             renderHijriCalendar(currentCalendarDate.getFullYear(), currentCalendarDate.getMonth() + 1);
         });
 
-        // --- Service Worker Registration ---
-        function registerServiceWorker() {
-            if ('serviceWorker' in navigator) {
-                window.addEventListener('load', () => {
-                    navigator.serviceWorker.register('./sw.js')
-                        .then(registration => console.log('Service Worker registered successfully:', registration))
-                        .catch(error => console.log('Service Worker registration failed:', error));
-                });
-            }
-        }
-
 
         // Initialize the app
         initDB();
         fetchSurahList();
-        registerServiceWorker();
     });
 </script>
 </body>

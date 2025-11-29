@@ -67,7 +67,7 @@
 <p class="text-amber-200">Panduan Digital Muslim Terlengkap</p>
 </header>
 <!-- Navigation -->
-<nav class="grid grid-cols-3 sm:grid-cols-5 md:grid-cols-9 gap-2 mb-6 text-center">
+<nav class="grid grid-cols-3 sm:grid-cols-5 md:grid-cols-7 gap-2 mb-6 text-center">
 <button class="nav-item p-2 rounded-lg bg-emerald-700 hover:bg-amber-500 hover:text-emerald-900 transition-all duration-300 active" data-target="quran">Al-Quran</button>
 <button class="nav-item p-2 rounded-lg bg-emerald-700 hover:bg-amber-500 hover:text-emerald-900 transition-all duration-300" data-target="hadits">Hadits</button>
 <button class="nav-item p-2 rounded-lg bg-emerald-700 hover:bg-amber-500 hover:text-emerald-900 transition-all duration-300" data-target="sholat">Jadwal Sholat</button>
@@ -81,6 +81,7 @@
 <button class="nav-item p-2 rounded-lg bg-emerald-700 hover:bg-amber-500 hover:text-emerald-900 transition-all duration-300" data-target="doa">Doa Harian</button>
 <button class="nav-item p-2 rounded-lg bg-emerald-700 hover:bg-amber-500 hover:text-emerald-900 transition-all duration-300" data-target="hijaiyah">Latihan Hijaiyah</button>
 <button class="nav-item p-2 rounded-lg bg-emerald-700 hover:bg-amber-500 hover:text-emerald-900 transition-all duration-300" data-target="bookmark">Bookmark</button>
+<button class="nav-item p-2 rounded-lg bg-emerald-700 hover:bg-amber-500 hover:text-emerald-900 transition-all duration-300" data-target="catatan">Catatan</button>
 <button class="nav-item p-2 rounded-lg bg-emerald-700 hover:bg-amber-500 hover:text-emerald-900 transition-all duration-300" data-target="hijriah">Kalender Hijriah</button>
 </nav>
 <a href="https://chatalquran9245432.lovable.app" target="_blank" rel="noopener noreferrer" class="block w-full text-center p-3 mb-6 rounded-lg bg-amber-600 text-white font-bold hover:bg-amber-500 transition-all duration-300">💬 Community Chat</a>
@@ -378,6 +379,26 @@
         <p class="text-xs text-center text-gray-400 mt-4">Data kalender disediakan oleh MyQuran API. Mungkin terdapat sedikit perbedaan dengan penentuan tanggal global.</p>
     </div>
 </section>
+<!-- Catatan Section -->
+<section class="content-section hidden" id="catatan-section">
+    <!-- Notes List View -->
+    <div id="notes-list-view">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-2xl font-bold text-amber-400">Catatan Anda</h2>
+            <button id="create-new-note-btn" class="px-4 py-2 bg-amber-500 text-emerald-900 font-bold rounded-lg hover:bg-amber-400 transition">Buat Catatan Baru</button>
+        </div>
+        <div id="notes-list-container" class="space-y-4"></div>
+    </div>
+    <!-- Note Detail View -->
+    <div id="note-detail-view" class="hidden">
+        <button id="back-to-notes-list" class="mb-4 px-4 py-2 bg-amber-500 text-emerald-900 font-bold rounded-lg hover:bg-amber-400 transition">Kembali</button>
+        <input type="text" id="note-title-input" class="bg-emerald-700 text-2xl font-bold text-amber-300 p-2 rounded-lg w-full mb-4" placeholder="Judul Catatan...">
+        <textarea id="note-content-textarea" class="bg-emerald-900 p-4 rounded-lg w-full h-64 mb-4" placeholder="Tulis tafsir pribadi atau catatan Anda di sini..."></textarea>
+        <h3 class="text-xl font-bold text-amber-400 mb-2">Ayat Terkait</h3>
+        <div id="note-ayahs-container" class="space-y-4 mb-6"></div>
+        <button id="delete-note-btn" class="px-4 py-2 bg-red-600 text-white font-bold rounded-lg hover:bg-red-500 transition">Hapus Catatan Ini</button>
+    </div>
+</section>
 </main>
 </div>
 <!-- Modal for Tafsir -->
@@ -389,6 +410,18 @@
 </div>
 <div class="text-gray-200 text-justify" id="tafsir-modal-content"></div>
 </div>
+</div>
+<!-- Modal for Add to Note -->
+<div class="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50 hidden p-4" id="add-to-note-modal">
+    <div class="bg-emerald-800 p-6 rounded-lg max-w-md w-full">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-xl font-bold text-amber-400">Tambahkan ke Catatan</h3>
+            <button class="text-2xl font-bold" id="close-add-to-note-modal">×</button>
+        </div>
+        <p class="text-gray-300 mb-4">Pilih catatan untuk menambahkan ayat ini, atau buat catatan baru.</p>
+        <div id="add-to-note-list" class="max-h-48 overflow-y-auto space-y-2 mb-4"></div>
+        <button id="add-to-new-note-btn" class="w-full px-4 py-2 bg-amber-500 text-emerald-900 font-bold rounded-lg hover:bg-amber-400 transition">Buat Catatan Baru dengan Ayat Ini</button>
+    </div>
 </div>
 <script>
     document.addEventListener('DOMContentLoaded', () => {
@@ -422,7 +455,15 @@
         const bookmarkListContainer = document.getElementById('bookmark-list');
         let db;
         const DB_NAME = 'islamic_app_db';
-        const DB_VERSION = 1;
+        const DB_VERSION = 2; // Version increased for new object store
+
+        // Notes variables
+        let currentEditingNoteId = null;
+        let noteContentSaveTimeout;
+        const notesListView = document.getElementById('notes-list-view');
+        const noteDetailView = document.getElementById('note-detail-view');
+        const notesListContainer = document.getElementById('notes-list-container');
+        let currentAyahForNote = null;
 
         // Murottal player variables
         let currentAudio = null;
@@ -446,6 +487,10 @@
                 if (!db.objectStoreNames.contains('bookmarks')) {
                     const objectStore = db.createObjectStore('bookmarks', { keyPath: 'id' });
                     objectStore.createIndex('surah_ayah', ['surahNumber', 'ayahNumber'], { unique: true });
+                }
+                if (!db.objectStoreNames.contains('notes')) {
+                    const notesStore = db.createObjectStore('notes', { keyPath: 'id', autoIncrement: true });
+                    notesStore.createIndex('title', 'title', { unique: false });
                 }
             };
 
@@ -520,6 +565,10 @@
                     if (!document.getElementById('hijri-calendar-grid').hasChildNodes()) {
                         renderHijriCalendar(new Date().getFullYear(), new Date().getMonth() + 1);
                     }
+                }
+
+                if (targetId === 'catatan') {
+                    showNotesList();
                 }
             });
         });
@@ -751,6 +800,7 @@
                                 <span class="bg-amber-500 text-emerald-900 font-bold px-3 py-1 rounded-md">${surah.number}:${ayat.numberInSurah}</span>
                                 <div>
                                     <button class="bookmark-btn px-3 py-1 bg-emerald-600 hover:bg-emerald-500 rounded-md text-sm" data-surah-number="${surah.number}" data-ayah-number="${ayat.numberInSurah}" data-surah-name="${surah.englishName}" data-ayah-text="${arabicAyah.text}" data-translation="${ayat.text}">🔖</button>
+                                    <button class="add-to-note-btn px-3 py-1 bg-emerald-600 hover:bg-emerald-500 rounded-md text-sm" data-surah-number="${surah.number}" data-ayah-number="${ayat.numberInSurah}" data-surah-name="${surah.englishName}" data-ayah-text="${arabicAyah.text}" data-translation="${ayat.text}">📝</button>
                                     <button class="tafsir-btn px-3 py-1 bg-emerald-600 hover:bg-emerald-500 rounded-md text-sm" data-surah="${surah.number}" data-ayat="${ayat.numberInSurah}">Tafsir</button>
                                 </div>
                             </div>
@@ -786,6 +836,7 @@
                                 <span class="bg-amber-500 text-emerald-900 font-bold px-3 py-1 rounded-md">${surah.nomor}:${ayat.nomor}</span>
                                 <div>
                                     <button class="bookmark-btn px-3 py-1 bg-emerald-600 hover:bg-emerald-500 rounded-md text-sm" data-surah-number="${surah.nomor}" data-ayah-number="${ayat.nomor}" data-surah-name="${surah.nama_latin}" data-ayah-text="${ayat.ar}" data-translation="${ayat.idn}">🔖</button>
+                                    <button class="add-to-note-btn px-3 py-1 bg-emerald-600 hover:bg-emerald-500 rounded-md text-sm" data-surah-number="${surah.nomor}" data-ayah-number="${ayat.nomor}" data-surah-name="${surah.nama_latin}" data-ayah-text="${ayat.ar}" data-translation="${ayat.idn}">📝</button>
                                     <button class="tafsir-btn px-3 py-1 bg-emerald-600 hover:bg-emerald-500 rounded-md text-sm" data-surah="${surah.nomor}" data-ayat="${ayat.nomor}">Tafsir</button>
                                 </div>
                             </div>
@@ -826,6 +877,13 @@
                 btn.addEventListener('click', (e) => {
                     toggleBookmark(e.currentTarget.dataset);
                 });
+            });
+
+            // Add event listeners for "add to note" buttons
+            document.querySelectorAll('.add-to-note-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    openAddToNoteModal(e.currentTarget.dataset);
+                })
             });
 
             // Add event listeners for audio buttons
@@ -2250,6 +2308,257 @@
             renderHijriCalendar(currentCalendarDate.getFullYear(), currentCalendarDate.getMonth() + 1);
         });
 
+        // --- Notes Logic ---
+        const createNewNoteBtn = document.getElementById('create-new-note-btn');
+        const backToNotesListBtn = document.getElementById('back-to-notes-list');
+        const noteTitleInput = document.getElementById('note-title-input');
+        const noteContentTextarea = document.getElementById('note-content-textarea');
+        const noteAyahsContainer = document.getElementById('note-ayahs-container');
+        const deleteNoteBtn = document.getElementById('delete-note-btn');
+        const addToNoteModal = document.getElementById('add-to-note-modal');
+        const closeAddToNoteModalBtn = document.getElementById('close-add-to-note-modal');
+        const addToNoteList = document.getElementById('add-to-note-list');
+        const addToNewNoteBtn = document.getElementById('add-to-new-note-btn');
+
+        function showNotesList() {
+            notesListView.classList.remove('hidden');
+            noteDetailView.classList.add('hidden');
+            currentEditingNoteId = null;
+            loadAllNotes();
+        }
+
+        function showNoteDetail(noteId) {
+            notesListView.classList.add('hidden');
+            noteDetailView.classList.remove('hidden');
+            currentEditingNoteId = noteId;
+            loadNoteForEditing(noteId);
+        }
+
+        async function loadAllNotes() {
+            if (!db) return;
+            const transaction = db.transaction(['notes'], 'readonly');
+            const store = transaction.objectStore('notes');
+            const request = store.getAll();
+
+            request.onsuccess = () => {
+                notesListContainer.innerHTML = '';
+                const notes = request.result;
+                if (notes.length === 0) {
+                    notesListContainer.innerHTML = '<p class="text-center text-gray-400">Anda belum punya catatan. Klik "Buat Catatan Baru" untuk memulai.</p>';
+                    return;
+                }
+                notes.forEach(note => {
+                    const noteCard = document.createElement('div');
+                    noteCard.className = 'bg-emerald-800 p-4 rounded-lg flex justify-between items-center cursor-pointer hover:bg-emerald-700';
+                    noteCard.innerHTML = `
+                        <div>
+                            <h3 class="font-bold text-lg text-amber-300">${note.title || 'Catatan Tanpa Judul'}</h3>
+                            <p class="text-sm text-gray-400">Terakhir diubah: ${new Date(note.updatedAt).toLocaleString('id-ID')}</p>
+                        </div>
+                        <div>
+                            <button class="rename-note-btn text-sm p-2 hover:text-amber-300" data-note-id="${note.id}">Ganti Nama</button>
+                            <button class="delete-note-list-btn text-sm p-2 text-red-400 hover:text-red-600" data-note-id="${note.id}">Hapus</button>
+                        </div>
+                    `;
+                    noteCard.addEventListener('click', (e) => {
+                        if (!e.target.matches('button')) {
+                            showNoteDetail(note.id);
+                        }
+                    });
+                    noteCard.querySelector('.rename-note-btn').addEventListener('click', () => renameNote(note.id, note.title));
+                    noteCard.querySelector('.delete-note-list-btn').addEventListener('click', () => deleteNote(note.id));
+                    notesListContainer.appendChild(noteCard);
+                });
+            };
+        }
+
+        async function createNewNote(title = "Catatan Baru", content = "", ayahs = []) {
+            if (!db) return;
+            const transaction = db.transaction(['notes'], 'readwrite');
+            const store = transaction.objectStore('notes');
+            const now = new Date().getTime();
+            const newNote = { title, content, ayahs, createdAt: now, updatedAt: now };
+            const request = store.add(newNote);
+            
+            return new Promise((resolve, reject) => {
+                request.onsuccess = () => resolve(request.result); // Returns the new note's ID
+                request.onerror = () => reject(request.error);
+            });
+        }
+
+        async function loadNoteForEditing(noteId) {
+            if (!db) return;
+            const transaction = db.transaction(['notes'], 'readonly');
+            const store = transaction.objectStore('notes');
+            const request = store.get(noteId);
+
+            request.onsuccess = () => {
+                const note = request.result;
+                if (note) {
+                    noteTitleInput.value = note.title;
+                    noteContentTextarea.value = note.content;
+                    renderNoteAyahs(note.ayahs || []);
+                }
+            };
+        }
+
+        function renderNoteAyahs(ayahs) {
+            noteAyahsContainer.innerHTML = '';
+            if (!ayahs || ayahs.length === 0) {
+                noteAyahsContainer.innerHTML = '<p class="text-gray-400">Belum ada ayat yang ditambahkan ke catatan ini.</p>';
+                return;
+            }
+            ayahs.forEach((ayah, index) => {
+                const ayahCard = document.createElement('div');
+                ayahCard.className = 'bg-emerald-800 bg-opacity-50 p-4 rounded-lg';
+                ayahCard.innerHTML = `
+                    <div class="flex justify-between items-center mb-2">
+                        <h4 class="font-bold text-amber-300">${ayah.surahName} (${ayah.surahNumber}:${ayah.ayahNumber})</h4>
+                        <button class="remove-ayah-from-note-btn text-red-400 hover:text-red-600" data-index="${index}">Hapus dari Catatan</button>
+                    </div>
+                    <p class="font-amiri text-xl text-right leading-loose text-amber-100 mb-3">${ayah.ayahText}</p>
+                    <p class="text-gray-300 leading-relaxed">${ayah.translation}</p>
+                `;
+                ayahCard.querySelector('.remove-ayah-from-note-btn').addEventListener('click', (e) => {
+                    removeAyahFromNote(parseInt(e.target.dataset.index));
+                });
+                noteAyahsContainer.appendChild(ayahCard);
+            });
+        }
+
+        async function updateNote(noteId, dataToUpdate) {
+            if (!db) return;
+            const transaction = db.transaction(['notes'], 'readwrite');
+            const store = transaction.objectStore('notes');
+            const getRequest = store.get(noteId);
+
+            getRequest.onsuccess = () => {
+                const note = getRequest.result;
+                if (note) {
+                    const updatedNote = { ...note, ...dataToUpdate, updatedAt: new Date().getTime() };
+                    store.put(updatedNote);
+                }
+            };
+        }
+
+        function deleteNote(noteId) {
+            if (confirm('Apakah Anda yakin ingin menghapus catatan ini? Tindakan ini tidak dapat dibatalkan.')) {
+                if (!db) return;
+                const transaction = db.transaction(['notes'], 'readwrite');
+                const store = transaction.objectStore('notes');
+                store.delete(noteId).onsuccess = () => {
+                    showNotification('Catatan berhasil dihapus.');
+                    if (currentEditingNoteId === noteId) {
+                        showNotesList();
+                    } else {
+                        loadAllNotes();
+                    }
+                };
+            }
+        }
+
+        function renameNote(noteId, oldTitle) {
+            const newTitle = prompt('Masukkan judul baru untuk catatan:', oldTitle);
+            if (newTitle && newTitle.trim() !== '') {
+                updateNote(noteId, { title: newTitle.trim() }).then(() => {
+                    showNotification('Judul catatan diperbarui.');
+                    loadAllNotes();
+                });
+            }
+        }
+
+        async function removeAyahFromNote(ayahIndex) {
+            if (!db || currentEditingNoteId === null) return;
+            const transaction = db.transaction(['notes'], 'readwrite');
+            const store = transaction.objectStore('notes');
+            const getRequest = store.get(currentEditingNoteId);
+
+            getRequest.onsuccess = () => {
+                const note = getRequest.result;
+                if (note && note.ayahs) {
+                    note.ayahs.splice(ayahIndex, 1);
+                    note.updatedAt = new Date().getTime();
+                    store.put(note).onsuccess = () => {
+                        showNotification('Ayat dihapus dari catatan.');
+                        renderNoteAyahs(note.ayahs);
+                    };
+                }
+            };
+        }
+
+        // --- "Add to Note" Modal Logic ---
+        function openAddToNoteModal(ayahData) {
+            currentAyahForNote = ayahData;
+            addToNoteModal.classList.remove('hidden');
+            
+            // Populate list of notes
+            const transaction = db.transaction(['notes'], 'readonly');
+            const store = transaction.objectStore('notes');
+            const request = store.getAll();
+            
+            request.onsuccess = () => {
+                addToNoteList.innerHTML = '';
+                if (request.result.length === 0) {
+                    addToNoteList.innerHTML = '<p class="text-gray-400 text-center">Belum ada catatan.</p>';
+                } else {
+                    request.result.forEach(note => {
+                        const noteItem = document.createElement('button');
+                        noteItem.className = 'w-full text-left p-2 bg-emerald-700 rounded hover:bg-emerald-600';
+                        noteItem.textContent = note.title || 'Catatan Tanpa Judul';
+                        noteItem.dataset.noteId = note.id;
+                        noteItem.addEventListener('click', () => addAyahToExistingNote(note.id));
+                        addToNoteList.appendChild(noteItem);
+                    });
+                }
+            };
+        }
+
+        function closeAddToNoteModal() {
+            addToNoteModal.classList.add('hidden');
+            currentAyahForNote = null;
+        }
+
+        async function addAyahToExistingNote(noteId) {
+            if (!db || !currentAyahForNote) return;
+            const transaction = db.transaction(['notes'], 'readwrite');
+            const store = transaction.objectStore('notes');
+            const getRequest = store.get(noteId);
+
+            getRequest.onsuccess = () => {
+                const note = getRequest.result;
+                if (note) {
+                    if (!note.ayahs) note.ayahs = [];
+                    note.ayahs.push(currentAyahForNote);
+                    note.updatedAt = new Date().getTime();
+                    store.put(note).onsuccess = () => {
+                        showNotification(`Ayat ditambahkan ke "${note.title || 'Catatan Tanpa Judul'}".`);
+                        closeAddToNoteModal();
+                    };
+                }
+            };
+        }
+
+        // Event Listeners for Notes
+        createNewNoteBtn.addEventListener('click', async () => {
+            const newNoteId = await createNewNote();
+            showNoteDetail(newNoteId);
+        });
+        backToNotesListBtn.addEventListener('click', showNotesList);
+        deleteNoteBtn.addEventListener('click', () => deleteNote(currentEditingNoteId));
+        noteTitleInput.addEventListener('input', () => updateNote(currentEditingNoteId, { title: noteTitleInput.value }));
+        noteContentTextarea.addEventListener('input', () => {
+            clearTimeout(noteContentSaveTimeout);
+            noteContentSaveTimeout = setTimeout(() => {
+                updateNote(currentEditingNoteId, { content: noteContentTextarea.value });
+                showNotification('Catatan disimpan otomatis.', 1000);
+            }, 750); // Auto-save after 750ms of inactivity
+        });
+        closeAddToNoteModalBtn.addEventListener('click', closeAddToNoteModal);
+        addToNewNoteBtn.addEventListener('click', async () => {
+            const newNoteId = await createNewNote(`Catatan dari QS ${currentAyahForNote.surahName}`, '', [currentAyahForNote]);
+            closeAddToNoteModal();
+            showNoteDetail(newNoteId);
+        });
 
         // Initialize the app
         initDB();

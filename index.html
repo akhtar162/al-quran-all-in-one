@@ -892,6 +892,7 @@
                                 <div>
                                     <button class="bookmark-btn px-3 py-1 bg-emerald-600 hover:bg-emerald-500 rounded-md text-sm" data-surah-number="${surah.number}" data-ayah-number="${ayat.numberInSurah}" data-surah-name="${surah.englishName}" data-ayah-text="${arabicAyah.text}" data-translation="${ayat.text}">🔖</button>
                                     <button class="add-to-note-btn px-3 py-1 bg-emerald-600 hover:bg-emerald-500 rounded-md text-sm" data-surah-number="${surah.number}" data-ayah-number="${ayat.numberInSurah}" data-surah-name="${surah.englishName}" data-ayah-text="${arabicAyah.text}" data-translation="${ayat.text}">📝</button>
+                                    <button class="copy-ayah-btn px-3 py-1 bg-emerald-600 hover:bg-emerald-500 rounded-md text-sm" data-surah-number="${surah.number}" data-ayah-number="${ayat.numberInSurah}" data-surah-name="${surah.englishName}" data-ayah-text="${arabicAyah.text}" data-translation="${ayat.text}">📋 Salin</button>
                                     <button class="tafsir-btn px-3 py-1 bg-emerald-600 hover:bg-emerald-500 rounded-md text-sm" data-surah="${surah.number}" data-ayat="${ayat.numberInSurah}">Tafsir</button>
                                 </div>
                             </div>
@@ -928,6 +929,7 @@
                                 <div>
                                     <button class="bookmark-btn px-3 py-1 bg-emerald-600 hover:bg-emerald-500 rounded-md text-sm" data-surah-number="${surah.nomor}" data-ayah-number="${ayat.nomor}" data-surah-name="${surah.nama_latin}" data-ayah-text="${ayat.ar}" data-translation="${ayat.idn}">🔖</button>
                                     <button class="add-to-note-btn px-3 py-1 bg-emerald-600 hover:bg-emerald-500 rounded-md text-sm" data-surah-number="${surah.nomor}" data-ayah-number="${ayat.nomor}" data-surah-name="${surah.nama_latin}" data-ayah-text="${ayat.ar}" data-translation="${ayat.idn}">📝</button>
+                                    <button class="copy-ayah-btn px-3 py-1 bg-emerald-600 hover:bg-emerald-500 rounded-md text-sm" data-surah-number="${surah.nomor}" data-ayah-number="${ayat.nomor}" data-surah-name="${surah.nama_latin}" data-ayah-text="${ayat.ar}" data-translation="${ayat.idn}">📋 Salin</button>
                                     <button class="tafsir-btn px-3 py-1 bg-emerald-600 hover:bg-emerald-500 rounded-md text-sm" data-surah="${surah.nomor}" data-ayat="${ayat.nomor}">Tafsir</button>
                                 </div>
                             </div>
@@ -967,6 +969,13 @@
             document.querySelectorAll('.bookmark-btn').forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     toggleBookmark(e.currentTarget.dataset);
+                });
+            });
+
+            // Add event listeners for copy buttons
+            document.querySelectorAll('.copy-ayah-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    copyAyahToClipboard(e.currentTarget.dataset);
                 });
             });
 
@@ -1056,6 +1065,24 @@
             }
             
             tafsirModal.classList.remove('hidden');
+        }
+
+        function copyAyahToClipboard(dataset) {
+            const { surahName, surahNumber, ayahNumber, ayahText, translation } = dataset;
+            const textToCopy = `"${ayahText}"\n\nArtinya: "${translation}"\n\n(QS. ${surahName} [${surahNumber}]:${ayahNumber})`;
+
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(textToCopy)
+                    .then(() => {
+                        showNotification('Ayat berhasil disalin ke clipboard!', 2000);
+                    })
+                    .catch(err => {
+                        console.error('Gagal menyalin teks: ', err);
+                        showNotification('Gagal menyalin ayat.', 2000);
+                    });
+            } else {
+                showNotification('Fitur salin tidak didukung di browser ini atau koneksi tidak aman.', 3000);
+            }
         }
 
         function playAudio(surahNumber, ayahNumber, totalAyahs) {

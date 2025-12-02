@@ -462,7 +462,10 @@
         <textarea id="note-content-textarea" class="bg-emerald-900 p-4 rounded-lg w-full h-64 mb-4" placeholder="Tulis tafsir pribadi atau catatan Anda di sini..."></textarea>
         <h3 class="text-xl font-bold text-amber-400 mb-2">Ayat Terkait</h3>
         <div id="note-ayahs-container" class="space-y-4 mb-6"></div>
-        <button id="delete-note-btn" class="px-4 py-2 bg-red-600 text-white font-bold rounded-lg hover:bg-red-500 transition">Hapus Catatan Ini</button>
+        <div class="flex gap-4">
+            <button id="download-note-btn" class="px-4 py-2 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-500 transition">Unduh sebagai .txt</button>
+            <button id="delete-note-btn" class="px-4 py-2 bg-red-600 text-white font-bold rounded-lg hover:bg-red-500 transition">Hapus Catatan Ini</button>
+        </div>
     </div>
 </section>
 </main>
@@ -2024,6 +2027,7 @@
         const noteContentTextarea = document.getElementById('note-content-textarea');
         const noteAyahsContainer = document.getElementById('note-ayahs-container');
         const deleteNoteBtn = document.getElementById('delete-note-btn');
+        const downloadNoteBtn = document.getElementById('download-note-btn');
         const addToNoteModal = document.getElementById('add-to-note-modal');
         const closeAddToNoteModalBtn = document.getElementById('close-add-to-note-modal');
         const addToNoteList = document.getElementById('add-to-note-list');
@@ -2195,6 +2199,62 @@
             };
         }
 
+        async function downloadNoteAsTxt() {
+            if (!db || currentEditingNoteId === null) {
+                showNotification('Tidak ada catatan yang aktif untuk diunduh.', 2000);
+                return;
+            }
+
+            const transaction = db.transaction(['notes'], 'readonly');
+            const store = transaction.objectStore('notes');
+            const request = store.get(currentEditingNoteId);
+
+            request.onsuccess = () => {
+                const note = request.result;
+                if (!note) {
+                    showNotification('Gagal menemukan data catatan.', 2000);
+                    return;
+                }
+
+                // 1. Format konten menjadi string teks
+                let fileContent = `Judul: ${note.title || 'Catatan Tanpa Judul'}\n`;
+                fileContent += `Tanggal Dibuat: ${new Date(note.createdAt).toLocaleString('id-ID')}\n`;
+                fileContent += `========================================\n\n`;
+                fileContent += `${note.content || 'Tidak ada isi catatan.'}\n\n`;
+
+                if (note.ayahs && note.ayahs.length > 0) {
+                    fileContent += `========================================\n`;
+                    fileContent += `AYAT-AYAT TERKAIT\n`;
+                    fileContent += `========================================\n\n`;
+
+                    note.ayahs.forEach(ayah => {
+                        fileContent += `QS. ${ayah.surahName} (${ayah.surahNumber}:${ayah.ayahNumber})\n`;
+                        fileContent += `${ayah.ayahText}\n`;
+                        fileContent += `Artinya: "${ayah.translation}"\n\n---\n\n`;
+                    });
+                }
+
+                // 2. Buat Blob dan trigger download
+                const blob = new Blob([fileContent], { type: 'text/plain;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                
+                // Buat nama file yang aman
+                const safeTitle = (note.title || 'catatan').replace(/[^a-z0-9]/gi, '_').toLowerCase();
+                a.download = `catatan_${safeTitle}.txt`;
+                a.href = url;
+                
+                document.body.appendChild(a);
+                a.click();
+                
+                // 3. Cleanup
+                setTimeout(() => {
+                    document.body.removeChild(a);
+                    window.URL.revokeObjectURL(url);
+                }, 100);
+            };
+        }
+
         // --- "Add to Note" Modal Logic ---
         function openAddToNoteModal(ayahData) {
             currentAyahForNote = ayahData;
@@ -2254,6 +2314,7 @@
         });
         backToNotesListBtn.addEventListener('click', showNotesList);
         deleteNoteBtn.addEventListener('click', () => deleteNote(currentEditingNoteId));
+        downloadNoteBtn.addEventListener('click', downloadNoteAsTxt);
         noteTitleInput.addEventListener('input', () => updateNote(currentEditingNoteId, { title: noteTitleInput.value }));
         noteContentTextarea.addEventListener('input', () => {
             clearTimeout(noteContentSaveTimeout);

@@ -17,6 +17,8 @@
 <!-- Leaflet Routing Machine for real-time tracking -->
 <link href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css" rel="stylesheet"/>
 <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js"></script>
+<!-- Math.js for Calculator -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/12.4.1/math.min.js"></script>
 <!-- Custom Styles -->
 <link href="style.css" rel="stylesheet"/>
 <style>
@@ -82,78 +84,94 @@
             </h2>
             <button id="close-settings-modal" class="text-2xl font-bold text-gray-300 hover:text-white">&times;</button>
         </div>
+        <!-- Search Input for Features -->
+        <input type="text" id="feature-search-input" placeholder="Cari fitur... (misal: Hadits, Zakat)" class="w-full p-3 mb-6 bg-emerald-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-400">
+
         <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 text-center">
-            <button class="nav-item p-3 rounded-lg" data-target="hadits">
+            <button class="nav-item feature-item p-3 rounded-lg" data-target="hadits">
                 <span class="icon">📚</span>
                 <span>Hadits</span>
             </button>
-            <a href="https://akhtar162.github.io/oase-islamic-feature3/" target="_blank" rel="noopener noreferrer" class="nav-item p-3 rounded-lg">
+            <a href="https://akhtar162.github.io/oase-islamic-feature3/" target="_blank" rel="noopener noreferrer" class="nav-item feature-item p-3 rounded-lg">
                 <span class="icon">🕒</span>
                 <span>Jadwal Sholat</span>
             </a>
-            <button class="nav-item p-3 rounded-lg" data-target="kiblat">
+            <button class="nav-item feature-item p-3 rounded-lg" data-target="kiblat">
                 <span class="icon">🕋</span>
                 <span>Arah Kiblat</span>
             </button>
-            <button class="nav-item p-3 rounded-lg" data-target="masjid">
+            <button class="nav-item feature-item p-3 rounded-lg" data-target="masjid">
                 <span class="icon">🕌</span>
                 <span>Masjid Terdekat</span>
             </button>
-            <button class="nav-item p-3 rounded-lg" data-target="tasbih">
+            <button class="nav-item feature-item p-3 rounded-lg" data-target="tasbih">
                 <span class="icon">📿</span>
                 <span>Tasbih</span>
             </button>
-            <button class="nav-item p-3 rounded-lg" data-target="zakat">
+            <button class="nav-item feature-item p-3 rounded-lg" data-target="zakat">
                 <span class="icon">💸</span>
                 <span>Kalkulator Zakat</span>
             </button>
-            <button class="nav-item p-3 rounded-lg" data-target="panduan">
+            <button class="nav-item feature-item p-3 rounded-lg" data-target="panduan">
                 <span class="icon">🤲</span>
                 <span>Panduan Sholat</span>
             </button>
-            <button class="nav-item p-3 rounded-lg" data-target="pencarian">
+            <button class="nav-item feature-item p-3 rounded-lg" data-target="pencarian">
                 <span class="icon">🔍</span>
                 <span>Cari Ayat</span>
             </button>
-            <button class="nav-item p-3 rounded-lg" data-target="doa">
+            <button class="nav-item feature-item p-3 rounded-lg" data-target="doa">
                 <span class="icon">🙏</span>
                 <span>Doa Harian</span>
             </button>
-            <button class="nav-item p-3 rounded-lg" data-target="hijaiyah">
+            <button class="nav-item feature-item p-3 rounded-lg" data-target="hijaiyah">
                 <span class="icon">✍️</span>
                 <span>Latihan Hijaiyah</span>
             </button>
-            <button class="nav-item p-3 rounded-lg" data-target="bookmark">
+            <button class="nav-item feature-item p-3 rounded-lg" data-target="bookmark">
                 <span class="icon">🔖</span>
                 <span>Bookmark</span>
             </button>
-            <button class="nav-item p-3 rounded-lg" data-target="catatan">
+            <button class="nav-item feature-item p-3 rounded-lg" data-target="catatan">
                 <span class="icon">🗒️</span>
                 <span>Catatan</span>
             </button>
-            <a href="https://akhtar162.github.io/oase-islamic-feature3/" target="_blank" rel="noopener noreferrer" class="nav-item p-3 rounded-lg">
+            <a href="https://akhtar162.github.io/oase-islamic-feature3/" target="_blank" rel="noopener noreferrer" class="nav-item feature-item p-3 rounded-lg">
                 <span class="icon">📅</span>
                 <span>Kalender Hijriah</span>
             </a>
-            <a href="https://akhtar162.github.io/oase-islamic-feature1/" target="_blank" rel="noopener noreferrer" class="nav-item p-3 rounded-lg">
+            <a href="https://akhtar162.github.io/oase-islamic-feature1/" target="_blank" rel="noopener noreferrer" class="nav-item feature-item p-3 rounded-lg">
                 <span class="icon">🧠</span>
                 <span>Cerdas Cermat</span>
             </a>
-            <a href="https://akhtar162.github.io/oase-islamic-feature2/" target="_blank" rel="noopener noreferrer" class="nav-item p-3 rounded-lg">
+            <a href="https://akhtar162.github.io/oase-islamic-feature2/" target="_blank" rel="noopener noreferrer" class="nav-item feature-item p-3 rounded-lg">
                 <span class="icon">🎯</span>
                 <span>Hafalan 40 Hari</span>
             </a>
-            <a href="https://chatalquran9245432.lovable.app" target="_blank" rel="noopener noreferrer" class="nav-item p-3 rounded-lg">
-                <span class="icon">💬</span>
-                <span>Community Chat</span>
             </a>
-            <a href="https://docs.google.com/document/d/1MZw1EYZWJ1XmYs3RsQDf-BOYDe7grv2iA_xDOcPXyQY/edit?tab=t.0" target="_blank" rel="noopener noreferrer" class="nav-item p-3 rounded-lg">
+            <a href="https://docs.google.com/document/d/1MZw1EYZWJ1XmYs3RsQDf-BOYDe7grv2iA_xDOcPXyQY/edit?tab=t.0" target="_blank" rel="noopener noreferrer" class="nav-item feature-item p-3 rounded-lg">
                 <span class="icon">🏛️</span>
                 <span>Peradaban Islam</span>
             </a>
-            <a href="https://akhtar162.github.io/oase-islamic-feature4/" target="_blank" rel="noopener noreferrer" class="nav-item p-3 rounded-lg">
+            <a href="https://akhtar162.github.io/oase-islamic-feature4/" target="_blank" rel="noopener noreferrer" class="nav-item feature-item p-3 rounded-lg">
                 <span class="icon">🏃</span>
                 <span>Petualangan Mengejar Pahala</span>
+            </a>
+            <button class="nav-item feature-item p-3 rounded-lg" data-target="kalkulator">
+                <span class="icon">🧮</span>
+                <span>Kalkulator</span>
+            </button>
+            <button class="nav-item feature-item p-3 rounded-lg" data-target="asmaul-husna">
+                <span class="icon">💖</span>
+                <span>Asmaul Husna</span>
+            </button>
+            <a href="https://p08726518-arch.github.io/easy-search1/" target="_blank" rel="noopener noreferrer" class="nav-item feature-item p-3 rounded-lg">
+                <span class="icon">🔎</span>
+                <span>Easy Search</span>
+            </a>
+            <a href="https://akhtar162.github.io/IRF-AI-11-6-2025/" target="_blank" rel="noopener noreferrer" class="nav-item feature-item p-3 rounded-lg">
+                <span class="icon">🤖</span>
+                <span>AI Chat</span>
             </a>
         </div>
     </div>
@@ -170,6 +188,14 @@
     <div class="flex flex-wrap gap-2">
         <button class="api-source px-3 py-1 bg-amber-500 text-emerald-900 font-bold rounded-lg text-sm" data-source="alquran-cloud">Alquran.cloud</button>
         <button class="api-source px-3 py-1 bg-emerald-700 text-white font-bold rounded-lg text-sm" data-source="santrikoding">Santrikoding</button>
+    </div>
+    <div id="language-selector-container" class="mt-2">
+        <p class="text-sm text-amber-200 mb-2">Pilih bahasa terjemahan:</p>
+        <div class="flex flex-wrap gap-2">
+            <button class="lang-select px-3 py-1 bg-amber-500 text-emerald-900 font-bold rounded-lg text-sm" data-lang="id">Indonesia</button>
+            <button class="lang-select px-3 py-1 bg-emerald-700 text-white font-bold rounded-lg text-sm" data-lang="en">English</button>
+        </div>
+        <p class="text-xs text-gray-400 mt-1">Pilihan bahasa hanya tersedia untuk sumber data Alquran.cloud.</p>
     </div>
 </div>
 <div id="api-error-message" class="error-message hidden">
@@ -476,6 +502,49 @@
         </div>
     </div>
 </section>
+<!-- Kalkulator Section -->
+<section class="content-section hidden" id="kalkulator-section">
+    <h2 class="text-2xl font-bold text-amber-400 mb-4 text-center">Kalkulator</h2>
+    <div class="max-w-sm mx-auto p-4 rounded-2xl shadow-lg calculator-body">
+        <!-- Display -->
+        <input type="text" id="calc-display" class="w-full text-right p-4 rounded-lg text-white font-mono focus:outline-none mb-4" readonly>
+        
+        <!-- Buttons -->
+        <div id="calc-buttons" class="grid grid-cols-4 gap-3">
+            <button class="calc-btn calc-btn-action">C</button>
+            <button class="calc-btn calc-btn-action">DEL</button>
+            <button class="calc-btn calc-btn-operator">%</button>
+            <button class="calc-btn calc-btn-operator">/</button>
+
+            <button class="calc-btn">7</button>
+            <button class="calc-btn">8</button>
+            <button class="calc-btn">9</button>
+            <button class="calc-btn calc-btn-operator">*</button>
+
+            <button class="calc-btn">4</button>
+            <button class="calc-btn">5</button>
+            <button class="calc-btn">6</button>
+            <button class="calc-btn calc-btn-operator">-</button>
+
+            <button class="calc-btn">1</button>
+            <button class="calc-btn">2</button>
+            <button class="calc-btn">3</button>
+            <button class="calc-btn calc-btn-operator">+</button>
+
+            <button class="calc-btn col-span-2">0</button>
+            <button class="calc-btn">.</button>
+            <button class="calc-btn calc-btn-equal">=</button>
+        </div>
+    </div>
+</section>
+<!-- Asmaul Husna Section -->
+<section class="content-section hidden" id="asmaul-husna-section">
+    <h2 class="text-2xl font-bold text-amber-400 mb-4 text-center">Asmaul Husna (99 Nama Allah)</h2>
+    <div id="asmaul-husna-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <!-- Asmaul Husna cards will be populated here -->
+    </div>
+</section>
+
 </main>
 </div>
 <!-- Modal for Tafsir -->
@@ -515,6 +584,7 @@
 
         let allQuranData = null; // Cache for Quran data for search
         let currentApiSource = 'alquran-cloud'; // Default API source
+        let currentLanguage = 'id'; // 'id' for Indonesian, 'en' for English
         let tajwidEnabled = false; // Track if tajwid coloring is enabled
 
         // Masjid Finder variables
@@ -551,6 +621,10 @@
         let currentAudio = null;
         let currentPlayingAyahElement = null;
 
+        // Asmaul Husna variables
+        let asmaulHusnaInitialized = false;
+        const asmaulHusnaGrid = document.getElementById('asmaul-husna-grid');
+
         const showLoading = () => loadingSpinner.classList.remove('hidden');
         const hideLoading = () => loadingSpinner.classList.add('hidden');
         const showApiError = () => apiErrorMessage.classList.remove('hidden');
@@ -559,6 +633,10 @@
         // --- Settings Modal Logic ---
         settingsBtn.addEventListener('click', () => {
             settingsModal.classList.add('active');
+            // Reset dan sembunyikan semua fitur saat modal dibuka
+            featureSearchInput.value = '';
+            featureItems.forEach(item => item.style.display = 'none');
+            featureSearchInput.focus(); // Langsung fokus ke input pencarian
         });
 
         closeSettingsModalBtn.addEventListener('click', () => {
@@ -569,6 +647,30 @@
         settingsModal.addEventListener('click', (e) => {
             if (e.target === settingsModal) {
                 settingsModal.classList.remove('active');
+            }
+        });
+
+        // --- Feature Search Logic in Modal ---
+        const featureSearchInput = document.getElementById('feature-search-input');
+        const featureItems = document.querySelectorAll('.feature-item');
+
+        featureSearchInput.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase().trim();
+
+            // Hanya tampilkan hasil jika ada input di kolom pencarian
+            if (searchTerm) {
+                featureItems.forEach(item => {
+                    const featureName = item.querySelector('span:last-child').textContent.toLowerCase();
+                    
+                    if (featureName.includes(searchTerm)) {
+                        item.style.display = 'flex'; // Tampilkan item yang cocok
+                    } else {
+                        item.style.display = 'none'; // Sembunyikan yang tidak cocok
+                    }
+                });
+            } else {
+                // Sembunyikan semua jika kolom pencarian kosong
+                featureItems.forEach(item => item.style.display = 'none');
             }
         });
 
@@ -611,9 +713,33 @@
                 
                 // Update API source
                 currentApiSource = btn.dataset.source;
+
+                // Show/hide language selector based on API source
+                const langSelector = document.getElementById('language-selector-container');
+                if (currentApiSource === 'santrikoding') {
+                    langSelector.classList.add('hidden');
+                    // Force back to Indonesian if Santrikoding is selected
+                    currentLanguage = 'id'; 
+                    updateLanguageButtons();
+                } else {
+                    langSelector.classList.remove('hidden');
+                }
                 
                 // Reload data
                 fetchSurahList();
+            });
+        });
+
+        // --- Language Selection ---
+        document.querySelectorAll('.lang-select').forEach(btn => {
+            btn.addEventListener('click', () => {
+                currentLanguage = btn.dataset.lang;
+                updateLanguageButtons();
+                // If in detail view, reload the surah with the new language
+                if (!surahDetailView.classList.contains('hidden')) {
+                    const surahNumber = document.getElementById('surah-detail-content').dataset.surahNumber;
+                    if (surahNumber) fetchSurahDetail(surahNumber);
+                }
             });
         });
 
@@ -669,9 +795,25 @@
                 if (targetId === 'catatan') {
                     showNotesList();
                 }
+
+                if (targetId === 'asmaul-husna' && !asmaulHusnaInitialized) {
+                    renderAsmaulHusna();
+                    asmaulHusnaInitialized = true;
+                }
             });
         });
 
+        function updateLanguageButtons() {
+            document.querySelectorAll('.lang-select').forEach(b => {
+                b.classList.remove('bg-amber-500', 'text-emerald-900');
+                b.classList.add('bg-emerald-700', 'text-white');
+            });
+            const activeBtn = document.querySelector(`.lang-select[data-lang="${currentLanguage}"]`);
+            if (activeBtn) {
+                activeBtn.classList.add('bg-amber-500', 'text-emerald-900');
+                activeBtn.classList.remove('bg-emerald-700', 'text-white');
+            }
+        }
         // --- Tajwid Coloring Functions ---
         function applyTajwidColoring(arabicText) {
             if (!tajwidEnabled) return arabicText;
@@ -837,41 +979,50 @@
 
         async function fetchSurahDetail(surahNumber) {
             showLoading();
+            surahDetailContainer.innerHTML = ''; // Clear previous content
             try {
-                let response, data, arabicData;
+                let response, data, arabicData, latinData;
                 
                 if (currentApiSource === 'alquran-cloud') {
                     // Try primary API first
                     try {
-                        response = await fetch(`https://alquran.cloud/api/surah/${surahNumber}/id.indonesian`);
-                        if (!response.ok) throw new Error('Network response was not ok');
-                        data = await response.json();
-                        
-                        // Also get Arabic text
-                        const arabicResponse = await fetch(`https://alquran.cloud/api/surah/${surahNumber}`);
-                        arabicData = await arabicResponse.json();
-                        
-                        renderSurahDetail(data.data, arabicData.data);
+                        // Fetch multiple editions in one call for efficiency, including selected language
+                        const translationEdition = currentLanguage === 'id' ? 'id.indonesian' : 'en.sahih';
+                        const editions = `quran-uthmani,${translationEdition},en.transliteration`;
+                        response = await fetch(`https://api.alquran.cloud/v1/surah/${surahNumber}/editions/${editions}`);
+                        if (!response.ok) throw new Error('Primary API failed, trying fallback');
+                        const combinedData = await response.json();
+
+                        arabicData = combinedData.data.find(d => d.edition.identifier === 'quran-uthmani');
+                        data = combinedData.data.find(d => d.edition.identifier === translationEdition);
+                        latinData = combinedData.data.find(d => d.edition.identifier === 'en.transliteration');
+
+                        renderSurahDetail(data, arabicData, latinData);
+
                     } catch (error) {
                         console.error('Primary API failed:', error);
-                        // Try fallback API
-                        response = await fetch(`https://api.alquran.cloud/v1/surah/${surahNumber}/id.indonesian`);
-                        if (!response.ok) throw new Error('Fallback API also failed');
-                        data = await response.json();
-                        
-                        // Also get Arabic text
-                        const arabicResponse = await fetch(`https://api.alquran.cloud/v1/surah/${surahNumber}`);
-                        arabicData = await arabicResponse.json();
-                        
-                        renderSurahDetail(data.data, arabicData.data);
+                        // Fallback to fetching one by one if combined fails
+                        const translationEdition = currentLanguage === 'id' ? 'id.indonesian' : 'en.sahih';
+                        const [transResponse, arabicResponse, latinResponse] = await Promise.all([
+                            fetch(`https://api.alquran.cloud/v1/surah/${surahNumber}/${translationEdition}`),
+                            fetch(`https://api.alquran.cloud/v1/surah/${surahNumber}`),
+                            fetch(`https://api.alquran.cloud/v1/surah/${surahNumber}/en.transliteration`)
+                        ]);
+
+                        if (!transResponse.ok || !arabicResponse.ok || !latinResponse.ok) throw new Error('Fallback API also failed');
+
+                        data = (await transResponse.json()).data;
+                        arabicData = (await arabicResponse.json()).data;
+                        latinData = (await latinResponse.json()).data;
+
+                        renderSurahDetail(data, arabicData, latinData);
                     }
                 } else {
                     // Use Santrikoding API
                     response = await fetch(`https://quran-api.santrikoding.com/api/surah/${surahNumber}`);
                     if (!response.ok) throw new Error('Network response was not ok');
                     data = await response.json();
-                    
-                    renderSurahDetail(data, null);
+                    renderSurahDetail(data, null, null);
                 }
                 
                 surahListView.classList.add('hidden');
@@ -884,13 +1035,15 @@
             }
         }
 
-        function renderSurahDetail(surah, arabicSurah) {
+        function renderSurahDetail(surah, arabicSurah, latinSurah) {
+            document.getElementById('surah-detail-content').dataset.surahNumber = surah.number || surah.nomor;
             let ayahsHtml;
             
             if (currentApiSource === 'alquran-cloud') {
                 // Render using alquran.cloud data structure
                 ayahsHtml = surah.ayahs.map((ayat, index) => {
                     const arabicAyah = arabicSurah.ayahs[index];
+                    const latinAyah = latinSurah.ayahs[index];
                     const coloredArabicText = applyTajwidColoring(arabicAyah.text);
                     
                     return `
@@ -905,6 +1058,7 @@
                                 </div>
                             </div>
                             <p class="font-amiri text-3xl text-right leading-loose text-amber-100 mb-4">${coloredArabicText}</p>
+                            <p class="text-amber-200 text-opacity-80 italic mb-4">${latinAyah.text}</p>
                             <p class="text-gray-300 leading-relaxed">${ayat.text}</p>
                             <div class="audio-player mt-4 flex items-center gap-4">
                                 <button class="play-button" data-surah="${surah.number}" data-ayah="${ayat.numberInSurah}" data-total-ayah="${surah.numberOfAyahs}">▶</button>
@@ -942,6 +1096,7 @@
                                 </div>
                             </div>
                             <p class="font-amiri text-3xl text-right leading-loose text-amber-100 mb-4">${coloredArabicText}</p>
+                            <p class="text-amber-200 text-opacity-80 italic mb-4">${ayat.tr}</p>
                             <p class="text-gray-300 leading-relaxed">${ayat.idn}</p>
                             <div class="audio-player mt-4 flex items-center gap-4">
                                 <button class="play-button" data-surah="${surah.nomor}" data-ayah="${ayat.nomor}" data-total-ayah="${surah.jumlah_ayat}">▶</button>
@@ -1021,23 +1176,25 @@
         async function fetchTafsir(surahNumber, ayatNumber) {
             showLoading();
             try {
-                // Get verse text and translation
-                const response = await fetch(`https://api.quran.com/api/v4/quran/verses/by_key/${surahNumber}:${ayatNumber}?language=id&words=false`);
-                if (!response.ok) throw new Error('Network response was not ok');
-                const data = await response.json();
-                
-                // Get tafsir text (using Kemenag tafsir, ID 169)
-                const tafsirResponse = await fetch(`https://api.quran.com/api/v4/quran/tafsirs/169?verse_key=${surahNumber}:${ayatNumber}`);
-                let tafsirData = null;
-                let tafsirText = "Tafsir tidak tersedia untuk ayat ini.";
-                
-                if (tafsirResponse.ok) {
-                    tafsirData = await tafsirResponse.json();
-                    if (tafsirData.tafsirs && tafsirData.tafsirs.length > 0) {
-                        tafsirText = tafsirData.tafsirs[0].text;
-                    }
+                // Menggunakan API dari SantriKoding yang lebih stabil dan lengkap
+                const response = await fetch(`https://quran-api.santrikoding.com/api/tafsir/${surahNumber}/${ayatNumber}`);
+                if (!response.ok) {
+                    throw new Error(`Gagal memuat data tafsir (Status: ${response.status})`);
                 }
-                showTafsirModal(surahNumber, ayatNumber, data.verse, tafsirText);
+                const data = await response.json();
+
+                if (!data) {
+                    throw new Error("Data tafsir tidak ditemukan.");
+                }
+
+                // Membuat objek 'verse' tiruan agar kompatibel dengan fungsi showTafsirModal
+                const verse = {
+                    text_uthmani: data.ar,
+                    translations: [{ text: data.idn }]
+                };
+                const tafsirText = data.tafsir.id.kemenag.text;
+
+                showTafsirModal(surahNumber, ayatNumber, verse, tafsirText);
             } catch (error) {
                 console.error('Error fetching tafsir:', error);
                 showTafsirModal(surahNumber, ayatNumber, null, "Gagal memuat tafsir. Silakan coba lagi.");
@@ -2365,10 +2522,163 @@
             showNoteDetail(newNoteId);
         });
 
+        // --- Calculator Logic ---
+        const calcDisplay = document.getElementById('calc-display');
+        const calcButtons = document.getElementById('calc-buttons');
+
+        calcButtons.addEventListener('click', (e) => {
+            if (e.target.tagName !== 'BUTTON') return;
+
+            const buttonValue = e.target.textContent;
+
+            if (buttonValue === 'C') {
+                calcDisplay.value = '';
+            } else if (buttonValue === 'DEL') {
+                calcDisplay.value = calcDisplay.value.slice(0, -1);
+            } else if (buttonValue === '=') {
+                try {
+                    // Sanitize input to prevent security issues, though math.js is generally safe
+                    const expression = calcDisplay.value.replace(/[^-()\d/*+.]/g, '');
+                    if (expression) {
+                        const result = math.evaluate(expression);
+                        calcDisplay.value = result;
+                    }
+                } catch (error) {
+                    calcDisplay.value = 'Error';
+                    setTimeout(() => calcDisplay.value = '', 1500); // Clear after 1.5s
+                }
+            } else {
+                if (calcDisplay.value === 'Error') calcDisplay.value = '';
+                calcDisplay.value += buttonValue;
+            }
+        });
+
         // Initialize the app
         initDB();
         fetchSurahList();
     });
+
+    // --- Asmaul Husna Logic ---
+    function renderAsmaulHusna() {
+        const asmaulHusnaData = [
+            { "name": "Ar-Rahman", "arabic": "الرحمن", "meaning": "Yang Maha Pengasih" },
+            { "name": "Ar-Rahim", "arabic": "الرحيم", "meaning": "Yang Maha Penyayang" },
+            { "name": "Al-Malik", "arabic": "الملك", "meaning": "Yang Maha Merajai" },
+            { "name": "Al-Quddus", "arabic": "القدوس", "meaning": "Yang Maha Suci" },
+            { "name": "As-Salam", "arabic": "السلام", "meaning": "Yang Maha Memberi Kesejahteraan" },
+            { "name": "Al-Mu'min", "arabic": "المؤمن", "meaning": "Yang Maha Memberi Keamanan" },
+            { "name": "Al-Muhaymin", "arabic": "المهيمن", "meaning": "Yang Maha Mengatur" },
+            { "name": "Al-'Aziz", "arabic": "العزيز", "meaning": "Yang Maha Perkasa" },
+            { "name": "Al-Jabbar", "arabic": "الجبار", "meaning": "Yang Memiliki Mutlak Kegagahan" },
+            { "name": "Al-Mutakabbir", "arabic": "المتكبر", "meaning": "Yang Maha Megah" },
+            { "name": "Al-Khaliq", "arabic": "الخالق", "meaning": "Yang Maha Pencipta" },
+            { "name": "Al-Bari'", "arabic": "البارئ", "meaning": "Yang Maha Melepaskan" },
+            { "name": "Al-Musawwir", "arabic": "المصور", "meaning": "Yang Maha Membentuk Rupa" },
+            { "name": "Al-Ghaffar", "arabic": "الغفار", "meaning": "Yang Maha Pengampun" },
+            { "name": "Al-Qahhar", "arabic": "القهار", "meaning": "Yang Maha Memaksa" },
+            { "name": "Al-Wahhab", "arabic": "الوهاب", "meaning": "Yang Maha Pemberi Karunia" },
+            { "name": "Ar-Razzaq", "arabic": "الرزاق", "meaning": "Yang Maha Pemberi Rezeki" },
+            { "name": "Al-Fattah", "arabic": "الفتاح", "meaning": "Yang Maha Pembuka Rahmat" },
+            { "name": "Al-'Alim", "arabic": "العليم", "meaning": "Yang Maha Mengetahui" },
+            { "name": "Al-Qabid", "arabic": "القابض", "meaning": "Yang Maha Menyempitkan" },
+            { "name": "Al-Basit", "arabic": "الباسط", "meaning": "Yang Maha Melapangkan" },
+            { "name": "Al-Khafid", "arabic": "الخافض", "meaning": "Yang Maha Merendahkan" },
+            { "name": "Ar-Rafi'", "arabic": "الرافع", "meaning": "Yang Maha Meninggikan" },
+            { "name": "Al-Mu'izz", "arabic": "المعز", "meaning": "Yang Maha Memuliakan" },
+            { "name": "Al-Muzill", "arabic": "المذل", "meaning": "Yang Maha Menghinakan" },
+            { "name": "As-Sami'", "arabic": "السميع", "meaning": "Yang Maha Mendengar" },
+            { "name": "Al-Basir", "arabic": "البصير", "meaning": "Yang Maha Melihat" },
+            { "name": "Al-Hakam", "arabic": "الحكم", "meaning": "Yang Maha Menetapkan" },
+            { "name": "Al-'Adl", "arabic": "العدل", "meaning": "Yang Maha Adil" },
+            { "name": "Al-Latif", "arabic": "اللطيف", "meaning": "Yang Maha Lembut" },
+            { "name": "Al-Khabir", "arabic": "الخبير", "meaning": "Yang Maha Mengenal" },
+            { "name": "Al-Halim", "arabic": "الحليم", "meaning": "Yang Maha Penyantun" },
+            { "name": "Al-'Azim", "arabic": "العظيم", "meaning": "Yang Maha Agung" },
+            { "name": "Al-Ghafur", "arabic": "الغفور", "meaning": "Yang Maha Memberi Pengampunan" },
+            { "name": "Asy-Syakur", "arabic": "الشكور", "meaning": "Yang Maha Pembalas Budi" },
+            { "name": "Al-'Ali", "arabic": "العلي", "meaning": "Yang Maha Tinggi" },
+            { "name": "Al-Kabir", "arabic": "الكبير", "meaning": "Yang Maha Besar" },
+            { "name": "Al-Hafiz", "arabic": "الحفيظ", "meaning": "Yang Maha Memelihara" },
+            { "name": "Al-Muqit", "arabic": "المقيت", "meaning": "Yang Maha Pemberi Kecukupan" },
+            { "name": "Al-Hasib", "arabic": "الحسيب", "meaning": "Yang Maha Membuat Perhitungan" },
+            { "name": "Al-Jalil", "arabic": "الجليل", "meaning": "Yang Maha Luhur" },
+            { "name": "Al-Karim", "arabic": "الكريم", "meaning": "Yang Maha Pemurah" },
+            { "name": "Ar-Raqib", "arabic": "الرقيب", "meaning": "Yang Maha Mengawasi" },
+            { "name": "Al-Mujib", "arabic": "المجيب", "meaning": "Yang Maha Mengabulkan" },
+            { "name": "Al-Wasi'", "arabic": "الواسع", "meaning": "Yang Maha Luas" },
+            { "name": "Al-Hakim", "arabic": "الحكيم", "meaning": "Yang Maha Bijaksana" },
+            { "name": "Al-Wadud", "arabic": "الودود", "meaning": "Yang Maha Mengasihi" },
+            { "name": "Al-Majid", "arabic": "المجيد", "meaning": "Yang Maha Mulia" },
+            { "name": "Al-Ba'ith", "arabic": "الباعث", "meaning": "Yang Maha Membangkitkan" },
+            { "name": "Asy-Syahid", "arabic": "الشهيد", "meaning": "Yang Maha Menyaksikan" },
+            { "name": "Al-Haqq", "arabic": "الحق", "meaning": "Yang Maha Benar" },
+            { "name": "Al-Wakil", "arabic": "الوكيل", "meaning": "Yang Maha Memelihara" },
+            { "name": "Al-Qawiyy", "arabic": "القوي", "meaning": "Yang Maha Kuat" },
+            { "name": "Al-Matin", "arabic": "المتين", "meaning": "Yang Maha Kokoh" },
+            { "name": "Al-Waliyy", "arabic": "الولي", "meaning": "Yang Maha Melindungi" },
+            { "name": "Al-Hamid", "arabic": "الحميد", "meaning": "Yang Maha Terpuji" },
+            { "name": "Al-Muhsi", "arabic": "المحصي", "meaning": "Yang Maha Mengalkulasi" },
+            { "name": "Al-Mubdi'", "arabic": "المبدئ", "meaning": "Yang Maha Memulai" },
+            { "name": "Al-Mu'id", "arabic": "المعيد", "meaning": "Yang Maha Mengembalikan Kehidupan" },
+            { "name": "Al-Muhyi", "arabic": "المحيي", "meaning": "Yang Maha Menghidupkan" },
+            { "name": "Al-Mumit", "arabic": "المميت", "meaning": "Yang Maha Mematikan" },
+            { "name": "Al-Hayy", "arabic": "الحي", "meaning": "Yang Maha Hidup" },
+            { "name": "Al-Qayyum", "arabic": "القيوم", "meaning": "Yang Maha Mandiri" },
+            { "name": "Al-Wajid", "arabic": "الواجد", "meaning": "Yang Maha Penemu" },
+            { "name": "Al-Majid", "arabic": "الماجد", "meaning": "Yang Maha Mulia" },
+            { "name": "Al-Wahid", "arabic": "الواحد", "meaning": "Yang Maha Tunggal" },
+            { "name": "Al-Ahad", "arabic": "الاحد", "meaning": "Yang Maha Esa" },
+            { "name": "As-Samad", "arabic": "الصمد", "meaning": "Yang Maha Dibutuhkan" },
+            { "name": "Al-Qadir", "arabic": "القادر", "meaning": "Yang Maha Menentukan" },
+            { "name": "Al-Muqtadir", "arabic": "المقتدر", "meaning": "Yang Maha Berkuasa" },
+            { "name": "Al-Muqaddim", "arabic": "المقدم", "meaning": "Yang Maha Mendahulukan" },
+            { "name": "Al-Mu'akhkhir", "arabic": "المؤخر", "meaning": "Yang Maha Mengakhirkan" },
+            { "name": "Al-Awwal", "arabic": "الأول", "meaning": "Yang Maha Awal" },
+            { "name": "Al-Akhir", "arabic": "الآخر", "meaning": "Yang Maha Akhir" },
+            { "name": "Az-Zahir", "arabic": "الظاهر", "meaning": "Yang Maha Nyata" },
+            { "name": "Al-Batin", "arabic": "الباطن", "meaning": "Yang Maha Ghaib" },
+            { "name": "Al-Wali", "arabic": "الوالي", "meaning": "Yang Maha Memerintah" },
+            { "name": "Al-Muta'ali", "arabic": "المتعالي", "meaning": "Yang Maha Tinggi" },
+            { "name": "Al-Barr", "arabic": "البر", "meaning": "Yang Maha Penderma" },
+            { "name": "At-Tawwab", "arabic": "التواب", "meaning": "Yang Maha Penerima Tobat" },
+            { "name": "Al-Muntaqim", "arabic": "المنتقم", "meaning": "Yang Maha Pemberi Balasan" },
+            { "name": "Al-'Afuww", "arabic": "العفو", "meaning": "Yang Maha Pemaaf" },
+            { "name": "Ar-Ra'uf", "arabic": "الرؤوف", "meaning": "Yang Maha Pengasuh" },
+            { "name": "Malik-al-Mulk", "arabic": "مالك الملك", "meaning": "Yang Maha Penguasa Kerajaan" },
+            { "name": "Zul-Jalal wal-Ikram", "arabic": "ذو الجلال والإكرام", "meaning": "Yang Maha Pemilik Kebesaran dan Kemuliaan" },
+            { "name": "Al-Muqsit", "arabic": "المقسط", "meaning": "Yang Maha Pemberi Keadilan" },
+            { "name": "Al-Jami'", "arabic": "الجامع", "meaning": "Yang Maha Mengumpulkan" },
+            { "name": "Al-Ghani", "arabic": "الغني", "meaning": "Yang Maha Kaya" },
+            { "name": "Al-Mughni", "arabic": "المغني", "meaning": "Yang Maha Pemberi Kekayaan" },
+            { "name": "Al-Mani'", "arabic": "المانع", "meaning": "Yang Maha Mencegah" },
+            { "name": "Ad-Darr", "arabic": "الضار", "meaning": "Yang Maha Penimpa Kemudharatan" },
+            { "name": "An-Nafi'", "arabic": "النافع", "meaning": "Yang Maha Memberi Manfaat" },
+            { "name": "An-Nur", "arabic": "النور", "meaning": "Yang Maha Bercahaya" },
+            { "name": "Al-Hadi", "arabic": "الهادي", "meaning": "Yang Maha Pemberi Petunjuk" },
+            { "name": "Al-Badi'", "arabic": "البديع", "meaning": "Yang Maha Pencipta Tiada Bandingannya" },
+            { "name": "Al-Baqi", "arabic": "الباقي", "meaning": "Yang Maha Kekal" },
+            { "name": "Al-Warith", "arabic": "الوارث", "meaning": "Yang Maha Pewaris" },
+            { "name": "Ar-Rasyid", "arabic": "الرشيد", "meaning": "Yang Maha Pandai" },
+            { "name": "As-Sabur", "arabic": "الصبور", "meaning": "Yang Maha Sabar" }
+        ];
+
+        const grid = document.getElementById('asmaul-husna-grid');
+        grid.innerHTML = ''; // Clear previous content
+
+        asmaulHusnaData.forEach((item, index) => {
+            const card = document.createElement('div');
+            card.className = 'bg-emerald-800 bg-opacity-50 p-4 rounded-lg text-center flex flex-col justify-between';
+            card.innerHTML = `
+                <div>
+                    <p class="font-amiri text-3xl text-amber-200">${item.arabic}</p>
+                    <h3 class="font-bold text-lg text-amber-300 mt-2">${item.name}</h3>
+                    <p class="text-sm text-gray-300">${item.meaning}</p>
+                </div>
+                <span class="text-xs text-emerald-500 mt-3">${index + 1}</span>
+            `;
+            grid.appendChild(card);
+        });
+    }
 </script>
 </body>
 </html>

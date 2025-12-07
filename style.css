@@ -1,11 +1,21 @@
 :root {
+    /* Brand Colors */
     --primary-green: #047857; /* Emerald 700 */
     --dark-green: #064e3b;   /* Emerald 900 */
     --gold: #f59e0b;         /* Amber 500 */
     --light-gold: #fcd34d;   /* Amber 300 */
+
+    /* Neutral & Text Colors */
+    --text-light: #d1fae5;      /* Emerald 100 */
+    --text-muted: #a7f3d0;     /* Emerald 200 */
+    --text-dark: #064e3b;       /* Emerald 900 */
+    --bg-light-contrast: #f0fdfa; /* Emerald 50 */
+    --surface-light: #ecfdf5;   /* Emerald 100 with more opacity */
+    --border-light: #d1fae5;    /* Emerald 200 */
+
     /* Tajwid Colors */
     --tajwid-ghunnah: #FF5722; /* Red Orange */
-    --tajwid-qalqalah: #2196F3; /* Blue */
+    --tajwid-qalqalah: #2196F3;/* Blue */
     --tajwid-madd: #4CAF50; /* Green */
     --tajwid-ikhfa: #9C27B0; /* Purple */
     --tajwid-idgham: #FF9800; /* Orange */
@@ -14,7 +24,8 @@
 }
 body {
     font-family: 'Poppins', sans-serif;
-    background-color: var(--dark-green);
+    background-color: var(--dark-green); /* Emerald 900 */
+    color: var(--text-light); /* Default text color for the app */
 }
 .font-amiri {
     font-family: 'Amiri', serif;
@@ -38,36 +49,39 @@ body {
     color: var(--dark-green);
 }
 /* Compass styling */
-.compass {
+/* Style for the Qibla compass (moved from HTML) */
+ .compass {
+    position: relative;
     width: 200px;
     height: 200px;
-    border-radius: 50%;
-    background: radial-gradient(circle, #fcd34d 0%, #f59e0b 100%);
-    position: relative;
+    background: url('https://i.imgur.com/J82sV2R.png') no-repeat center center; /* Compass background image */
+    background-size: contain;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 0 20px rgba(0,0,0,0.5);
-    border: 5px solid var(--gold);
-}
-.compass-needle {
+    /* Adding a subtle shadow to lift it off the background */
+    filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3));
+ }
+ .compass-needle {
+    position: absolute;
     width: 0;
     height: 0;
-    border-left: 15px solid transparent;
-    border-right: 15px solid transparent;
-    border-bottom: 90px solid var(--dark-green);
-    position: absolute;
-    top: 15px;
-    transform-origin: 50% 85px;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 80px solid var(--gold); /* Use CSS variable */
+    transform-origin: bottom center;
     transition: transform 0.5s ease-out;
-}
-.compass-center {
+    /* Add a drop shadow for depth */
+    filter: drop-shadow(0 3px 5px rgba(0,0,0,0.4));
+ }
+ .compass-center {
     width: 20px;
     height: 20px;
-    background: var(--dark-green);
+    background-color: #fff;
     border-radius: 50%;
     z-index: 10;
-}
+    box-shadow: 0 0 5px rgba(0,0,0,0.5);
+ }
 /* Map styling */
 #map {
     height: 450px;
@@ -77,12 +91,12 @@ body {
 /* Leaflet routing machine custom style */
 .leaflet-routing-container {
     background-color: rgba(6, 78, 59, 0.8); /* bg-emerald-900 with opacity */
-    color: #d1d5db; /* text-gray-300 */
+    color: var(--text-light);
     border-radius: 0.5rem;
     backdrop-filter: blur(5px);
 }
 .leaflet-routing-alt, .leaflet-routing-alt h2 {
-    color: #fcd34d; /* text-amber-300 */
+    color: var(--light-gold);
 }
 /* Ayat number styling */
 .ayah-number {
@@ -103,7 +117,7 @@ body {
     padding: 8px 16px;
     border-radius: 8px;
     background-color: rgba(16, 185, 129, 0.2);
-    color: #d1fae5;
+    color: var(--text-light);
     cursor: pointer;
     transition: all 0.3s;
 }
@@ -121,7 +135,7 @@ body {
 }
 .asmaul-husna-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);
 }
 /* Audio player styling */
 .audio-player {
@@ -232,17 +246,17 @@ body {
 }
 .mosque-name {
     font-weight: bold;
-    color: var(--gold);
+    color: var(--light-gold);
     margin-bottom: 4px;
 }
 .mosque-address {
     font-size: 14px;
-    color: #d1fae5;
+    color: var(--text-light);
     margin-bottom: 4px;
 }
 .mosque-distance {
     font-size: 12px;
-    color: #a7f3d0;
+    color: var(--text-muted);
 }
 .location-permission {
     background-color: rgba(251, 191, 36, 0.2);
@@ -266,7 +280,7 @@ body {
 }
 /* Hijaiyah Canvas Styling */
 .hijaiyah-container {
-    background-color: #f0fdfa;
+    background-color: var(--bg-light-contrast);
     border-radius: 12px;
     padding: 20px;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
@@ -280,12 +294,12 @@ body {
 .hijaiyah-title {
     font-family: 'Poppins', sans-serif;
     font-weight: 700;
-    color: #047857;
+    color: var(--primary-green);
     margin-bottom: 8px;
 }
 .hijaiyah-subtitle {
     font-family: 'Poppins', sans-serif;
-    color: #6b7280;
+    color: #4b5563; /* Gray 600 */
     font-size: 16px;
 }
 .hijaiyah-controls {
@@ -293,7 +307,7 @@ body {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
-    background-color: #ecfdf5;
+    background-color: var(--surface-light);
     padding: 15px;
     border-radius: 8px;
     border: 1px solid #d1fae5;
@@ -306,16 +320,16 @@ body {
 .target-label {
     font-family: 'Poppins', sans-serif;
     font-weight: 600;
-    color: #047857;
+    color: var(--primary-green);
     margin-bottom: 8px;
     font-size: 16px;
 }
 .target-letter {
     font-family: 'Amiri', serif;
-    font-size: 6rem;
+    font-size: clamp(4rem, 10vw, 6rem); /* Responsive font size */
     font-weight: 700;
-    color: #007979;
-    text-shadow: 2px 2px #ccfbf1;
+    color: #0d9488; /* Teal 600 */
+    text-shadow: 2px 2px var(--border-light);
     line-height: 1;
 }
 .control-buttons {
@@ -337,18 +351,18 @@ body {
     box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
 }
 .next-button {
-    background-color: #4f46e5;
+    background-color: var(--primary-green);
     color: white;
 }
 .next-button:hover {
-    background-color: #4338ca;
+    background-color: var(--dark-green);
 }
 .clear-button {
-    background-color: #ef4444;
+    background-color: #e11d48; /* Rose 600 */
     color: white;
 }
 .clear-button:hover {
-    background-color: #dc2626;
+    background-color: #be123c; /* Rose 700 */
 }
 .canvas-container {
     display: flex;
@@ -360,15 +374,15 @@ body {
     box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06);
 }
 #drawingCanvas {
-    border: 2px solid #00a8a8;
+    border: 2px solid #0d9488; /* Teal 600 */
     border-radius: 8px;
     cursor: crosshair;
     touch-action: none;
-    max-width: 100%;
-    height: auto;
+    width: 100%;
+    aspect-ratio: 1 / 1; /* Maintain square aspect ratio */
 }
 .feedback-container {
-    background-color: #ecfdf5;
+    background-color: var(--surface-light);
     border-left: 4px solid #10b981;
     padding: 15px;
     border-radius: 8px;
@@ -376,7 +390,7 @@ body {
 .feedback-title {
     font-family: 'Poppins', sans-serif;
     font-weight: 700;
-    color: #047857;
+    color: var(--primary-green);
     margin-bottom: 8px;
     font-size: 18px;
 }
@@ -406,17 +420,17 @@ body {
 }
 .current-score {
     font-weight: 600;
-    color: #047857;
+    color: var(--primary-green);
 }
 .target-score {
-    color: #6b7280;
+    color: #4b5563; /* Gray 600 */
 }
 .hijaiyah-progress {
     margin-top: 20px;
-    background-color: #ecfdf5;
+    background-color: var(--surface-light);
     padding: 15px;
     border-radius: 8px;
-    border: 1px solid #d1fae5;
+    border: 1px solid var(--border-light);
 }
 .progress-title {
     font-family: 'Poppins', sans-serif;
@@ -440,9 +454,9 @@ body {
     font-family: 'Amiri', serif;
     font-size: 24px;
     font-weight: 700;
-    color: #047857;
+    color: var(--primary-green);
     background-color: white;
-    border: 1px solid #d1fae5;
+    border: 1px solid var(--border-light);
     transition: all 0.2s;
 }
 .letter-item.completed {
@@ -461,10 +475,6 @@ body {
     .hijaiyah-controls {
         flex-direction: column;
         gap: 15px;
-    }
-    .control-buttons {
-        width: 100%;
-        justify-content: center;
     }
     .target-letter {
         font-size: 4rem;
@@ -533,4 +543,65 @@ body {
 .settings-modal .nav-item .icon {
     font-size: 1.75rem; /* text-3xl */
     line-height: 1;
+}
+
+/* --- Calculator UI Styles --- */
+.calculator-body {
+    background: linear-gradient(145deg, var(--dark-green), #053a2c);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+}
+
+#calc-display {
+    background-color: #0c382b;
+    box-shadow: inset 0 4px 8px rgba(0,0,0,0.4);
+    color: #fef3c7; /* Amber 100 */
+    text-shadow: 0 0 5px var(--gold);
+    font-size: clamp(2rem, 8vw, 3rem); /* Responsive font size */
+    padding: 2rem 1.5rem;
+}
+
+.calc-btn {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 1.25rem;
+    color: #e0f2f1;
+    background-color: rgba(16, 185, 129, 0.2);
+    border: 1px solid rgba(16, 185, 129, 0.4);
+    border-radius: 0.75rem;
+    padding: 1rem 0;
+    cursor: pointer;
+    transition: all 0.1s ease-out;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2), inset 0 1px 1px rgba(255,255,255,0.1);
+}
+
+.calc-btn:hover {
+    background-color: rgba(16, 185, 129, 0.4);
+    transform: translateY(-2px);
+}
+
+.calc-btn:active {
+    transform: translateY(1px);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.3), inset 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.calc-btn-operator {
+    background-color: rgba(5, 150, 105, 0.4); /* Emerald 600 */
+    color: var(--light-gold);
+}
+
+.calc-btn-action {
+    background-color: rgba(153, 27, 27, 0.5); /* Red 800 */
+    color: #fecaca; /* Red 200 */
+}
+
+.calc-btn-equal {
+    background-color: var(--gold);
+    color: var(--dark-green);
+    font-size: 1.75rem;
+    grid-row: span 2; /* Make equals button taller */
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }

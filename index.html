@@ -5,19 +5,19 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Aplikasi Islami Lengkap</title>
-<!-- Tailwind CSS for styling -->
+<!-- Tailwind CSS untuk styling -->
 <script src="https://cdn.tailwindcss.com"></script>
-<!-- Google Fonts for typography -->
+<!-- Google Fonts untuk typography -->
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet"/>
-<!-- Leaflet JS for Maps -->
+<!-- Leaflet JS untuk Maps -->
 <link crossorigin="" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" rel="stylesheet"/>
 <script crossorigin="" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<!-- Leaflet Routing Machine for real-time tracking -->
+<!-- Leaflet Routing Machine untuk real-time tracking -->
 <link href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css" rel="stylesheet"/>
 <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js"></script>
-<!-- Math.js for Calculator -->
+<!-- Math.js untuk kalkulator -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/12.4.1/math.min.js"></script>
 <!-- Custom Styles -->
 <link href="style.css" rel="stylesheet"/>
@@ -180,10 +180,6 @@
             <a href="https://p08726518-arch.github.io/html-viewer434/" target="_blank" rel="noopener noreferrer" class="nav-item feature-item p-3 rounded-lg">
                 <span class="icon">🌐</span>
                 <span>HTML Viewer</span>
-            </a>
-            <a href="https://akhtar162.github.io/uno-game0986r/" target="_blank" rel="noopener noreferrer" class="nav-item feature-item p-3 rounded-lg">
-                <span class="icon">🃏</span>
-                <span>Uno Game</span>
             </a>
         </div>
     </div>
@@ -473,7 +469,6 @@
 <section class="content-section hidden" id="bookmark-section">
     <h2 class="text-2xl font-bold text-amber-400 mb-4">Ayat yang Ditandai</h2>
     <div class="space-y-4" id="bookmark-list">
-        <!-- Bookmarked ayahs will be populated here -->
     </div>
 </section>
 <!-- Kalender Hijriah Section -->
@@ -486,7 +481,6 @@
             <button id="next-month-btn" class="px-4 py-2 bg-emerald-700 rounded-lg hover:bg-amber-500 transition-colors">Berikutnya &gt;</button>
         </div>
         <div id="hijri-calendar-grid" class="grid grid-cols-7 gap-1 text-center">
-            <!-- Calendar will be populated here -->
         </div>
         <p class="text-xs text-center text-gray-400 mt-4">Data kalender disediakan oleh MyQuran API. Mungkin terdapat sedikit perbedaan dengan penentuan tanggal global.</p>
     </div>
@@ -594,10 +588,10 @@
         const settingsModal = document.getElementById('settings-modal');
         const closeSettingsModalBtn = document.getElementById('close-settings-modal');
 
-        let allQuranData = null; // Cache for Quran data for search
-        let currentApiSource = 'alquran-cloud'; // Default API source
-        let currentLanguage = 'id'; // 'id' for Indonesian, 'en' for English
-        let tajwidEnabled = false; // Track if tajwid coloring is enabled
+        let allQuranData = null; 
+        let currentApiSource = 'alquran-cloud'; 
+        let currentLanguage = 'id'; 
+        let tajwidEnabled = false; 
 
         // Masjid Finder variables
         let map = null;
@@ -830,29 +824,21 @@
         function applyTajwidColoring(arabicText) {
             if (!tajwidEnabled) return arabicText;
             
-            // This is a simplified tajwid coloring implementation
-            // In a real application, you would use a more sophisticated algorithm or API
             let coloredText = arabicText;
             
-            // Apply ghunnah coloring (ن and م with shaddah)
+            
             coloredText = coloredText.replace(/(نّ|مّ)/g, '<span class="tajwid-ghunnah">$1</span>');
             
-            // Apply qalqalah coloring (ق ط ب ج د)
             coloredText = coloredText.replace(/([قطبجد])/g, '<span class="tajwid-qalqalah">$1</span>');
             
-            // Apply madd coloring (ا و ي with madd)
             coloredText = coloredText.replace(/([اوي])/g, '<span class="tajwid-madd">$1</span>');
             
-            // Apply ikhfa coloring (ن with letters other than م و ي ن ر ل)
             coloredText = coloredText.replace(/ن([ثذرزسشصضطظفخحعغقك])/g, 'ن<span class="tajwid-ikhfa">$1</span>');
             
-            // Apply idgham coloring (ن with م و ي ن ر ل)
             coloredText = coloredText.replace(/ن([مونرل])/g, 'ن<span class="tajwid-idgham">$1</span>');
             
-            // Apply iqlab coloring (ن with ب)
             coloredText = coloredText.replace(/ن(ب)/g, 'ن<span class="tajwid-iqlab">$1</span>');
             
-            // Apply hamzah coloring
             coloredText = coloredText.replace(/(أ|إ|ؤ|ئ)/g, '<span class="tajwid-hamzah">$1</span>');
             
             return coloredText;
@@ -917,7 +903,7 @@
                 let data;
                 
                 if (currentApiSource === 'alquran-cloud') {
-                    // Try primary API first
+                  
                     try {
                         response = await fetch('https://alquran.cloud/api/surah');
                         if (!response.ok) throw new Error('Network response was not ok');
@@ -926,7 +912,7 @@
                         renderSurahList(data.data);
                     } catch (error) {
                         console.error('Primary API failed:', error);
-                        // Try fallback API
+                     
                         response = await fetch('https://api.alquran.cloud/v1/surah');
                         if (!response.ok) throw new Error('Fallback API also failed');
                         data = await response.json();
@@ -934,7 +920,7 @@
                         renderSurahList(data.data);
                     }
                 } else {
-                    // Use Santrikoding API
+                   
                     response = await fetch('https://quran-api.santrikoding.com/api/surah');
                     if (!response.ok) throw new Error('Network response was not ok');
                     data = await response.json();
@@ -1390,7 +1376,7 @@
 
         startQiblaBtn.addEventListener('click', () => {
             if (window.DeviceOrientationEvent) {
-                // Request permission for iOS 13+
+               
                 if (typeof DeviceOrientationEvent.requestPermission === 'function') {
                     DeviceOrientationEvent.requestPermission()
                         .then(response => {
@@ -1405,7 +1391,7 @@
                             qiblaInfo.textContent = 'Terjadi kesalahan saat meminta izin akses sensor.';
                         });
                 } else {
-                    // Non-iOS 13+ devices
+
                     startCompass();
                 }
             } else {
@@ -1450,7 +1436,7 @@
                     position => {
                         const { latitude, longitude } = position.coords;
                         
-                        // Calculate Qibla direction
+                        //  Qibla direction
                         const qiblaDirection = calculateQiblaDirection(latitude, longitude);
                         
                         // Calculate the difference between current direction and Qibla
@@ -1806,7 +1792,6 @@
                 navigator.vibrate(50);
             }
             
-            // Check if count reaches 33 or 100
             if (count === 33) {
                 showNotification('33x - Subhanallah');
             } else if (count === 66) {
@@ -1824,7 +1809,6 @@
         });
         
         function showNotification(message) {
-            // Create notification element
             const notification = document.createElement('div');
             notification.className = 'fixed top-20 left-1/2 transform -translate-x-1/2 bg-amber-500 text-emerald-900 px-4 py-2 rounded-lg font-bold z-50';
             notification.textContent = message;
@@ -1851,7 +1835,7 @@
                 return;
             }
             
-            // Calculate nisab (85 grams of gold)
+            // kalkulator nisab (85 gram emas)
             const nisab = 85 * goldPrice;
             
             if (income < nisab) {
@@ -1871,7 +1855,7 @@
                 return;
             }
             
-            // Calculate nisab (85 grams of gold)
+            // kalkulator nisab (85 gram emas)
             const nisab = 85 * goldPrice;
             
             if (wealth < nisab) {
